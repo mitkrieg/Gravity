@@ -40,6 +40,12 @@ class Player(Sprite):
     def die(self):
         pass
 
+class Toolbar(Sprite):
+    def __init__(self,x,y,image):
+        Sprite.__init__(self)
+        
+
+
 class Game(object):
     title = 'Gravity'
     screen_size = 1000, 750
