@@ -9,7 +9,7 @@ class Player(Sprite):
     def __init__(self,x,y,surf,color,group,maxX,maxY,tail):
         Sprite.__init__(self)
         if self.image == None:
-            self.image = utils.load_graphics(str('player.png'))
+            self.image = utils.load_graphics(str('pnvscaled.png'))
         self.rect = self.image.get_rect()
         self.makeANew = False
         self.rect.x = x
