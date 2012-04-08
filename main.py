@@ -19,15 +19,15 @@ class Game(object):
             pygame.display.set_caption(self.title)
         self.fps = 30
         self.gameOver = False
+        self.planetGroup = Group()
         self.playerGroup = RenderUpdates()
-        self.planetGroup = RenderUpdates()
         self.tails = RenderUpdates()
         self.goalCollide = Group()
         self.toolbar = OrderedUpdates()
         self.bar = ToolBar(0,626,self.toolbar,self.screen)
         self.goal = Goal(600,300,self.goalCollide)
         self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,750,self.tails)
-        self.planets = Planet(100,100,50,1)
+        self.planets = Planet(100,100,50,1,self.planetGroup)
         self.stars = Star(self.screen,1000,626,70)
 
     def quit(self):
@@ -56,6 +56,7 @@ class Game(object):
                     self.player.refresh(4)
 
         self.stars.draw()
+        self.planetGroup.update(self.screen)
         self.goalCollide.draw(self.screen)
         self.toolbar.draw(self.screen)
         self.player.drawTails()

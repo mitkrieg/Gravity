@@ -161,13 +161,15 @@ class Star(object):
 
 class Planet(Sprite):
     image = None
-    def __init__(self,x,y,mass,imagetype):
+    def __init__(self,x,y,mass,imagetype,group):
         Sprite.__init__(self)
         if self.image == None:
             self.image = system.load_graphics('player.png')
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y 
+        self.group = group
+        self.add(self.group)
                 #self.screen = place
         self.mass = mass
 
@@ -180,6 +182,4 @@ class Planet(Sprite):
     def movePlanet(self):
         pass
 
-    def draw(self):
-        pass
 
