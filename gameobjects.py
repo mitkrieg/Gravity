@@ -29,7 +29,7 @@ class Player(Sprite):
         self.tailColorCounter = 0
         self.tailColors = [(0,0,255),(0,114,54),(255,255,0),(237,28,36),(199,178,153),(158,0,93)]
         self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
-
+        self.newplace = self.goTo[0]
 
 
     def update(self):
@@ -53,7 +53,6 @@ class Player(Sprite):
             self.rect.y += newY
             
     def refresh(self,newplace):
-        self.makeANew = True
         self.newplace = self.goTo[newplace]
         
 
@@ -99,6 +98,9 @@ class Goal(Sprite):
         self.group = group
         self.add(group)
 
+    def resize(self,w,h):
+        self.image = pygame.transform.scale(self.image,(w,h))
+
 
 
 class Bar(Sprite):
@@ -119,9 +121,14 @@ class ToolBar(Bar):
     def __init__(self,x,y,friends,place,image=str('taskbar.png')):
         Bar.__init__(self,x,y,friends,place,image)
         self.lives = Lives(402,697,self.group,self.screen)
+        self.goRect = pygame.Rect(774,658,118,75)
 
     def lives_update(self):
         self.lives.update()
+
+    def go_collision(self,pos,player):
+        if self.goRect.collidepoint(pos):
+            player.makeANew = True
         
 
 class Lives(Bar):
@@ -140,7 +147,6 @@ class Lives(Bar):
         else:
             self.kill()
         self.next_life -= 1
-
 
 
 class Star(object):
