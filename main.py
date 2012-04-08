@@ -4,7 +4,7 @@ import random
 import pygame
 from pygame.locals import *
 from pygame.sprite import Sprite, Group, RenderUpdates, OrderedUpdates
-from gameobjects import Player, Goal, ToolBar, Star
+from gameobjects import Player, Goal, ToolBar, Star, Planet 
 
 
 class Game(object):
@@ -20,12 +20,14 @@ class Game(object):
         self.fps = 30
         self.gameOver = False
         self.playerGroup = RenderUpdates()
+        self.planetGroup = RenderUpdates()
         self.tails = RenderUpdates()
         self.goalCollide = Group()
         self.toolbar = OrderedUpdates()
         self.bar = ToolBar(0,626,self.toolbar,self.screen)
         self.goal = Goal(600,300,self.goalCollide)
         self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,750,self.tails)
+        self.planets = Planet(100,100,50,1)
         self.stars = Star(self.screen,1000,626,70)
 
     def quit(self):

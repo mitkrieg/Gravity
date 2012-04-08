@@ -3,6 +3,7 @@
 import pygame
 import system
 import random
+from physics import vec_comp,vector,vec_add,distance
 from random import randrange
 from pygame.sprite import Sprite, Group
 
@@ -69,7 +70,10 @@ class Player(Sprite):
             color = tail.color
             for coordinates in tail.tail:
                 x,y = coordinates
-                pygame.draw.line(self.screen,color,(x+17,y+6),(x+17,y+6),3)              
+                pygame.draw.line(self.screen,color,(x+17,y+6),(x+17,y+6),3)
+
+    def getPlayerPos(self):
+        return self.rect.x, self.rect.y
             
 
 class Tails(Sprite):
@@ -153,5 +157,27 @@ class Star(object):
 
     def draw(self):
         for star in self.stars:
-            self.screen.fill(star[3],(star[0],star[1],star[2],star[2]))            
-            
+            self.screen.fill(star[3],(star[0],star[1],star[2],star[2]))   
+
+class Planet(Sprite)
+    image = None
+    def __init__(self,x,y,mass,imagetype):
+        Sprite.__init__(self)
+        if self.image == None:
+            self.image = system.load_graphics(image)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y 
+        self.screen = place
+        self.mass = mass
+
+    def pullPlayer(self,x,y):
+        dist = distance(self.x,self.y,x,y)
+        self.pull = self.mass/dist**2
+        return self.pull
+
+    def movePlanet(self):
+        pass
+
+    def draw(self):
+        pass
