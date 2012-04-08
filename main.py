@@ -4,7 +4,7 @@ import random
 import pygame
 from pygame.locals import *
 from pygame.sprite import Sprite, Group, RenderUpdates, OrderedUpdates
-from gameobjects import Player, Goal, ToolBar
+from gameobjects import Player, Goal, ToolBar, Star
 
 
 class Game(object):
@@ -26,6 +26,7 @@ class Game(object):
         self.bar = ToolBar(0,626,self.toolbar,self.screen)
         self.goal = Goal(600,300,self.goalCollide)
         self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,750,self.tails)
+        self.stars = Star(self.screen,1000,626,70)
 
     def quit(self):
         self.gameOver = False
@@ -52,6 +53,7 @@ class Game(object):
                 if evt.key == K_t:
                     self.player.refresh(4)
 
+        self.stars.draw()
         self.goalCollide.draw(self.screen)
         self.toolbar.draw(self.screen)
         self.player.drawTails()

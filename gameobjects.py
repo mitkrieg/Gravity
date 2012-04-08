@@ -2,6 +2,8 @@
 
 import pygame
 import system
+import random
+from random import randrange
 from pygame.sprite import Sprite, Group
 
 class Player(Sprite):
@@ -134,3 +136,22 @@ class Lives(Bar):
         else:
             self.kill()
         self.next_life -= 1
+
+
+
+class Star(object):
+    def __init__(self,screen,screenw,screenh,max_stars):
+        self.stars = []
+        self.screen = screen
+        self.height = screenh
+        self.width = screenw
+        self.max_stars = max_stars
+        for i in range(self.max_stars):
+            star = [randrange(0,self.width-1),randrange(0,self.height-1),1]
+            star.append((170,170,170))
+            self.stars.append(star)
+
+    def draw(self):
+        for star in self.stars:
+            self.screen.fill(star[3],(star[0],star[1],star[2],star[2]))            
+            
