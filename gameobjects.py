@@ -88,7 +88,7 @@ class Goal(Sprite):
     def __init__(self,x,y,group):
         Sprite.__init__(self)
         if self.image == None:
-            self.image = system.load_graphics('goalrendered.png')
+            self.image = system.load_graphics('earth.png')
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -147,7 +147,7 @@ class Star(object):
         self.width = screenw
         self.max_stars = max_stars
         for i in range(self.max_stars):
-            star = [randrange(0,self.width-1),randrange(0,self.height-1),1]
+            star = [randrange(0,self.width-1),randrange(0,self.height-1),2]
             star.append((170,170,170))
             self.stars.append(star)
 
