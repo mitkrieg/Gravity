@@ -118,7 +118,7 @@ class Bar(Sprite):
 class ToolBar(Bar):
     def __init__(self,x,y,friends,place,image=str('taskbar.png')):
         Bar.__init__(self,x,y,friends,place,image)
-        self.lives = Lives(493,697,self.group,self.screen)
+        self.lives = Lives(402,697,self.group,self.screen)
 
     def lives_update(self):
         self.lives.update()
