@@ -26,3 +26,6 @@ def vector(x,y):
     ang = tan(y/x)
     return mag,ang
         
+def distance((x1,y1),(x2,y2)):
+    dist = math.sqrt((y1-y2)**2+(x1-x2)**2)
+    return dist
