@@ -3,8 +3,8 @@
 import random
 import pygame
 from pygame.locals import *
-from pygame.sprite import Sprite, Group, RenderUpdates
-from gameobjects import Player, Goal
+from pygame.sprite import Sprite, Group, RenderUpdates, OrderedUpdates
+from gameobjects import Player, Goal, ToolBar
 
 
 class Game(object):
@@ -22,6 +22,8 @@ class Game(object):
         self.playerGroup = RenderUpdates()
         self.tails = RenderUpdates()
         self.goalCollide = Group()
+        self.toolbar = OrderedUpdates()
+        self.bar = ToolBar(0,626,self.toolbar,self.screen)
         self.goal = Goal(600,300,self.goalCollide)
         self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,750,self.tails)
 
@@ -49,15 +51,19 @@ class Game(object):
                     self.player.refresh(3)
                 if evt.key == K_t:
                     self.player.refresh(4)
-                
+
         self.goalCollide.draw(self.screen)
+        self.toolbar.draw(self.screen)
         self.player.drawTails()
         self.playerGroup.update()
         self.playerGroup.draw(self.screen)  
 
-        if len(self.playerGroup) == 0:
+        if len(self.playerGroup) == 0 and self.player.lives > 0:
             pygame.time.wait(750)
+            self.bar.lives_update()
             self.player.add(self.playerGroup)
+        elif len(self.playerGroup) == 0:
+            self.bar.lives_update()
                 
         if pygame.sprite.spritecollideany(self.player, self.goalCollide) != None:
             self.done = True

@@ -21,6 +21,7 @@ class Player(Sprite):
         self.maxY = maxY
         self.group = group
         self.add(group)
+        self.lives = 3
         self.tailGroup = tail
         self.tailColorCounter = 0
         self.tailColors = [(0,0,255),(0,114,54),(255,255,0),(237,28,36),(199,178,153),(158,0,93)]
@@ -38,6 +39,7 @@ class Player(Sprite):
             pygame.time.delay(1000)
             self.rect.x, self.rect.y = self.reset
             self.makeANew = False
+            self.lives -= 1
             self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
             self.remove(self.group)
             
@@ -65,7 +67,7 @@ class Player(Sprite):
             color = tail.color
             for coordinates in tail.tail:
                 x,y = coordinates
-                pygame.draw.line(self.screen,color,(x+20,y+4),(x+20,y+4),3)              
+                pygame.draw.line(self.screen,color,(x+17,y+6),(x+17,y+6),3)              
             
 
 class Tails(Sprite):
@@ -92,18 +94,43 @@ class Goal(Sprite):
         self.add(group)
 
 
-class ToolBar(Sprite):
+
+class Bar(Sprite):
     image = None
-    def __init__(self,x,y,group):
+    def __init__(self,x,y,friends,place,image=str('taskbar.png')):
         Sprite.__init__(self)
         if self.image == None:
-            self.image = system.load_graphics('taskbar.png')
+            self.image = system.load_graphics(image)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.group = group
+        self.add(friends)
+        self.group = friends
         self.score = 1000
-        self.add(group)
+        self.screen = place
 
-    def score(self):
-        pass
+class ToolBar(Bar):
+    def __init__(self,x,y,friends,place,image=str('taskbar.png')):
+        Bar.__init__(self,x,y,friends,place,image)
+        self.lives = Lives(493,697,self.group,self.screen)
+
+    def lives_update(self):
+        self.lives.update()
+        
+
+class Lives(Bar):
+    def __init__(self,x,y,friends,place,image=str('3lives.png')):
+        Bar.__init__(self,x,y,friends,place,image)
+        self.next_life = 2
+        self.three_lives = self.image
+        self.two_lives = system.load_graphics('2lives.png')
+        self.one_life = system.load_graphics('1life.png')
+        
+    def update(self):
+        if self.next_life == 2:
+            self.image = self.two_lives
+        elif self.next_life == 1:
+            self.image = self.one_life
+        else:
+            self.kill()
+        self.next_life -= 1
