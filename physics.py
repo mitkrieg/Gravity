@@ -3,14 +3,6 @@
 import math
 from math import sin,cos,tan
 
-def calc_force(mass1,mass2,distance):
-    force = (mass1*mass2)/distance^2
-    return force
-
-def calc_accel(force,mass):
-    accel = force/mass 
-    return accel
-
 def vec_comp(vec):
     mag,angle = vec
     x = mag*cos(angle)
