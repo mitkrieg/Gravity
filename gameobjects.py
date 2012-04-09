@@ -114,7 +114,6 @@ class Bar(Sprite):
         self.rect.y = y
         self.add(friends)
         self.group = friends
-        self.score = 1000
         self.screen = place
 
 class ToolBar(Bar):
@@ -189,3 +188,21 @@ class Planet(Sprite):
         pass
 
 
+
+class Score(object):
+    def __init__(self,x,y,surf,start_score,size,color):
+        self.x = x
+        self.y = y
+        self.surface = surf
+        self.score = start_score
+        self.size = size
+        self.color = color
+
+    def draw(self):
+        if self.score < 1000:
+            system.text_render('%011d' % self.score,self.x,self.y,self.color,self.size,self.surface)
+        elif self.score >= 1000:
+            system.text_render('%010d' % self.score,self.x,self.y,self.color,self.size,self.surface)
+
+    def update(self,loss):
+        self.score += loss
