@@ -101,6 +101,13 @@ class Goal(Sprite):
     def resize(self,w,h):
         self.image = pygame.transform.scale(self.image,(w,h))
 
+    def change_loc(self,x,y):
+        self.rect.x = x
+        self.rect.y = y
+
+    def change_image(self,new_image=str('earth.png')):
+        self.image = system.load_graphics(new_image)
+
 
 
 class Bar(Sprite):
