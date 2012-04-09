@@ -13,3 +13,9 @@ def load_graphics(filename):
         print 'Cannot load', fullfname
         raise SystemExit, message
     return image
+
+
+def text_render(text,x,y,color,size, surface):
+    font = pygame.font.Font(None, size)
+    rend = font.render(text, True, color)
+    surface.blit(rend, (x,y))
