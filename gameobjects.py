@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-
-import pygame
 import system
+import pygame
+from pygame.locals import *
 import random
-from physics import vec_comp,vector,vec_add,distance
 from random import randrange
 from pygame.sprite import Sprite, Group
 
@@ -192,9 +191,11 @@ class ItemsTab(Bar):
         elif self.rect.x > -400:
             self.rect.x = 1
             self.items_rect.x = 914
+            self.open = True
             other.grabbed = None
         elif self.rect.x < -400:
             self.rect.x = -912
+            self.open = False
             other.grabbed = None
         
     def dropped(self):
