@@ -19,3 +19,8 @@ def text_render(text,x,y,color,size, surface):
     font = pygame.font.Font(None, size)
     rend = font.render(text, True, color)
     surface.blit(rend, (x,y))
+
+def text_return(text,color,size):
+    font = pygame.font.Font(None, size)
+    rend = font.render(text, True, color)
+    return rend

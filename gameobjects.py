@@ -32,6 +32,7 @@ class Player(Sprite):
         self.newplace = self.goTo[0]
 
 
+
     def update(self):
         self.alive = self.dead()
         if not self.alive:
@@ -126,16 +127,85 @@ class Bar(Sprite):
 class ToolBar(Bar):
     def __init__(self,x,y,friends,place,image=str('taskbar.png')):
         Bar.__init__(self,x,y,friends,place,image)
-        self.lives = Lives(402,697,self.group,self.screen)
+        self.lives = Lives(self.rect.x+402,self.rect.y+71,self.group,self.screen)
         self.goRect = pygame.Rect(774,658,118,75)
+        self.barGoal = Goal(self.rect.x+605,self.rect.y+70,self.group)
+        self.barGoal.resize(40,40)
+        self.score = Score(250,665,friends,self.screen,1000,26,(0,0,0))
+        self.itemsTab = ItemsTab(self.rect.x-912,self.rect.y+15,self.group,self.screen,-917,-954,-3)
+        self.grabbed = None
 
     def lives_update(self):
         self.lives.update()
 
-    def go_collision(self,pos,player):
-        if self.goRect.collidepoint(pos):
+    def update(self,pos):
+        if self.grabbed != None:
+            self.grabbed.update(pos,self)
+
+    def clear_grabbed(self):
+        if self.grabbed != None:
+            self.grabbed.dropped()
+            self.grabbed = None
+
+    def collision_test(self,pos,player):
+        if self.goRect.collidepoint(pos) and not self.itemsTab.open:
             player.makeANew = True
+        elif self.itemsTab.items_rect.collidepoint(pos):
+            self.grabbed = self.itemsTab
         
+class Score(Sprite):
+    def __init__(self,x,y,group,surf,start_score,size,color):
+        Sprite.__init__(self)
+        self.group = group
+        self.surface = surf
+        self.score = start_score
+        self.size = size
+        self.color = color
+        self.image = system.text_return(str(self.score),self.color,self.size)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.add(group)
+
+    def update(self,loss):
+        self.score += loss
+        self.image = system.text_return(str(self.score),self.color,self.size)
+
+
+class ItemsTab(Bar):
+    def __init__(self,x,y,friends,place,x_open_offset,x_closed_offset,click_offset,image=str('items_tab.png')):
+        Bar.__init__(self,x,y,friends,place,image)
+        self.items_rect = pygame.Rect(1,643,40,104)
+        self.open = False
+        self.xOpenOffset = x_open_offset
+        self.xClosedOffset = x_closed_offset
+        self.clickOffset = click_offset
+
+    def update(self,pos,other):
+        newx, newy = pos
+        if self.rect.x < 2 and self.rect.x >= -912 and not self.open:
+            self.rect.x = newx-917
+            self.items_rect.x = newx-self.clickOffset
+        elif self.rect.x < 2 and self.rect.x >= -912 and self.open:
+            self.rect.x = newx-954
+            self.items_rect.x = newx-self.clickOffset
+        elif self.rect.x > -400:
+            self.rect.x = 1
+            self.items_rect.x = 914
+            other.grabbed = None
+        elif self.rect.x < -400:
+            self.rect.x = -912
+            other.grabbed = None
+        
+    def dropped(self):
+        if self.open == False:
+            self.rect.x = 1
+            self.items_rect.x = 914
+            self.open = True
+        else:
+            self.rect.x = -912
+            self.items_rect.x = 1
+            self.open = False
 
 class Lives(Bar):
     def __init__(self,x,y,friends,place,image=str('3lives.png')):
@@ -194,7 +264,7 @@ class Planet(Sprite):
     def movePlanet(self):
         pass
 
-
+'''
 
 class Score(object):
     def __init__(self,x,y,surf,start_score,size,color):
@@ -213,3 +283,4 @@ class Score(object):
 
     def update(self,loss):
         self.score += loss
+'''
