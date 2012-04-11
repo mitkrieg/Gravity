@@ -151,7 +151,7 @@ class ToolBar(Bar):
     def collision_test(self,pos,player):
         if self.goRect.collidepoint(pos) and not self.itemsTab.open and not self.menuWidget.open:
             player.makeANew = True
-        elif self.itemsTab.items_rect.collidepoint(pos):
+        elif self.itemsTab.items_rect.collidepoint(pos) and not self.menuWidget.open:
             self.grabbed = self.itemsTab
         elif self.menuWidget.widget_rect.collidepoint(pos) and not self.itemsTab.open:
             self.grabbed = self.menuWidget
