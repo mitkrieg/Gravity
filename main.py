@@ -28,7 +28,7 @@ class Game(object):
         self.goal = Goal(600,300,self.goalCollide)
         self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,750,self.tails)
         self.planets = Planet(100,100,50,1,self.planetGroup)
-        self.stars = Star(self.screen,1000,626,70)
+        self.stars = Starfield(self.screen,1000,626,70)
 
     def quit(self):
         self.gameOver = False
@@ -55,7 +55,7 @@ class Game(object):
                 if evt.key == K_t:
                     self.player.refresh(4)
             #if evt.type == MOUSEBUTTONDOWN:
-             #  print pygame.mouse.get_pos()
+             #   print pygame.mouse.get_pos()
             if evt.type == MOUSEBUTTONDOWN:
                 self.bar.collision_test(pygame.mouse.get_pos(),self.player)
             if evt.type == MOUSEBUTTONUP:

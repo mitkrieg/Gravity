@@ -127,12 +127,14 @@ class ToolBar(Bar):
     def __init__(self,x,y,friends,place,image=str('taskbar.png')):
         Bar.__init__(self,x,y,friends,place,image)
         self.lives = Lives(self.rect.x+402,self.rect.y+71,self.group,self.screen)
-        self.goRect = pygame.Rect(774,658,118,75)
+        self.goRect = pygame.Rect(717,658,118,75)
         self.barGoal = Goal(self.rect.x+605,self.rect.y+70,self.group)
         self.barGoal.resize(40,40)
         self.score = Score(250,665,friends,self.screen,1000,26,(0,0,0))
+        self.menuWidget = MenuWidget(self.rect.x+690,723,self.group,self.screen)
         self.itemsTab = ItemsTab(self.rect.x-912,self.rect.y+15,self.group,self.screen,-917,-954,-3)
         self.grabbed = None
+                
 
     def lives_update(self):
         self.lives.update()
@@ -147,10 +149,12 @@ class ToolBar(Bar):
             self.grabbed = None
 
     def collision_test(self,pos,player):
-        if self.goRect.collidepoint(pos) and not self.itemsTab.open:
+        if self.goRect.collidepoint(pos) and not self.itemsTab.open and not self.menuWidget.open:
             player.makeANew = True
-        elif self.itemsTab.items_rect.collidepoint(pos):
+        elif self.itemsTab.items_rect.collidepoint(pos) and not self.menuWidget.open:
             self.grabbed = self.itemsTab
+        elif self.menuWidget.widget_rect.collidepoint(pos) and not self.itemsTab.open:
+            self.grabbed = self.menuWidget
         
 class Score(Sprite):
     def __init__(self,x,y,group,surf,start_score,size,color):
@@ -208,6 +212,41 @@ class ItemsTab(Bar):
             self.items_rect.x = 1
             self.open = False
 
+class MenuWidget(Bar):
+    def __init__(self,x,y,friends,place,image=str('widget.png')):
+        Bar.__init__(self,x,y,friends,place,image)
+        self.widget_rect = pygame.Rect(878,726,27,21)
+        self.open = False
+      
+    def update(self,pos,other):
+        newx, newy = pos
+        if self.rect.y <= 723 and self.rect.y > 428 and not self.open:
+            self.rect.y = newy-23
+            self.widget_rect.y = newy-23
+        elif self.rect.y <= 723 and self.rect.y > 428 and self.open:
+            self.rect.y = newy+1
+            self.widget_rect.y = newy-3
+        elif self.rect.y > 575:
+            self.rect.y = 723
+            self.widget_rect.y = 726
+            self.open = False
+            other.grabbed = None
+        elif self.rect.y < 575:
+            self.rect.y = 429
+            self.widget_rect.y = 431
+            self.open = True
+            other.grabbed = None
+
+    def dropped(self):
+        if not self.open:
+            self.rect.y = 429
+            self.widget_rect.y = 431
+            self.open = True
+        else:
+            self.rect.y = 723
+            self.widget_rect.y = 726
+            self.open = False
+
 class Lives(Bar):
     def __init__(self,x,y,friends,place,image=str('3lives.png')):
         Bar.__init__(self,x,y,friends,place,image)
@@ -226,7 +265,7 @@ class Lives(Bar):
         self.next_life -= 1
 
 
-class Star(object):
+class Starfield(object):
     def __init__(self,screen,screenw,screenh,max_stars):
         self.stars = []
         self.screen = screen
@@ -264,24 +303,3 @@ class Planet(Sprite):
 
     def movePlanet(self):
         pass
-
-'''
-
-class Score(object):
-    def __init__(self,x,y,surf,start_score,size,color):
-        self.x = x
-        self.y = y
-        self.surface = surf
-        self.score = start_score
-        self.size = size
-        self.color = color
-
-    def draw(self):
-        if self.score < 1000:
-            system.text_render('%011d' % self.score,self.x,self.y,self.color,self.size,self.surface)
-        elif self.score >= 1000:
-            system.text_render('%010d' % self.score,self.x,self.y,self.color,self.size,self.surface)
-
-    def update(self,loss):
-        self.score += loss
-'''
