@@ -4,7 +4,10 @@ import random
 import pygame
 from pygame.locals import *
 from pygame.sprite import Sprite, Group, RenderUpdates, OrderedUpdates
-from gameobjects import *
+from player import Player
+from goal import Goal
+from bar import *
+from starfield import Starfield
 
 
 class Game(object):
@@ -19,7 +22,7 @@ class Game(object):
             pygame.display.set_caption(self.title)
         self.fps = 30
         self.gameOver = False
-        self.planetGroup = Group()
+        self.userPlacedObjects = Group()
         self.playerGroup = RenderUpdates()
         self.tails = RenderUpdates()
         self.goalCollide = Group()
@@ -27,7 +30,6 @@ class Game(object):
         self.bar = ToolBar(0,626,self.toolbar,self.screen,self)
         self.goal = Goal(600,300,self.goalCollide)
         self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,750,self.tails)
-        self.planets = Planet(100,100,50,1,self.planetGroup)
         self.stars = Starfield(self.screen,1000,626,70)
 
     def quit(self):
@@ -65,7 +67,7 @@ class Game(object):
      
         self.stars.draw()
         self.bar.update(pygame.mouse.get_pos())
-        self.planetGroup.update(self.screen)
+        self.userPlacedObjects.update(self.screen)
         self.goalCollide.draw(self.screen)
         self.toolbar.draw(self.screen)
         self.player.drawTails()
