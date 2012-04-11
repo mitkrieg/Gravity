@@ -124,7 +124,7 @@ class Bar(Sprite):
         self.screen = place
 
 class ToolBar(Bar):
-    def __init__(self,x,y,friends,place,image=str('taskbar.png')):
+    def __init__(self,x,y,friends,place,other,image=str('taskbar.png')):
         Bar.__init__(self,x,y,friends,place,image)
         self.lives = Lives(self.rect.x+402,self.rect.y+71,self.group,self.screen)
         self.goRect = pygame.Rect(717,658,118,75)
@@ -133,6 +133,7 @@ class ToolBar(Bar):
         self.score = Score(250,665,friends,self.screen,1000,26,(0,0,0))
         self.menuWidget = MenuWidget(self.rect.x+690,723,self.group,self.screen)
         self.itemsTab = ItemsTab(self.rect.x-912,self.rect.y+15,self.group,self.screen,-917,-954,-3)
+        self.game = other
         self.grabbed = None
                 
 
@@ -155,6 +156,8 @@ class ToolBar(Bar):
             self.grabbed = self.itemsTab
         elif self.menuWidget.widget_rect.collidepoint(pos) and not self.itemsTab.open:
             self.grabbed = self.menuWidget
+        elif self.menuWidget.quit_rect.collidepoint(pos):
+            self.game.quit()
         
 class Score(Sprite):
     def __init__(self,x,y,group,surf,start_score,size,color):
@@ -216,6 +219,7 @@ class MenuWidget(Bar):
     def __init__(self,x,y,friends,place,image=str('widget.png')):
         Bar.__init__(self,x,y,friends,place,image)
         self.widget_rect = pygame.Rect(878,726,27,21)
+        self.quit_rect = pygame.Rect(747,887,99,26)
         self.open = False
       
     def update(self,pos,other):
@@ -223,9 +227,11 @@ class MenuWidget(Bar):
         if self.rect.y <= 723 and self.rect.y > 428 and not self.open:
             self.rect.y = newy-23
             self.widget_rect.y = newy-23
+            self.quit_rect.y = 637
         elif self.rect.y <= 723 and self.rect.y > 428 and self.open:
             self.rect.y = newy+1
             self.widget_rect.y = newy-3
+            self.quit_rect.y = 1000
         elif self.rect.y > 575:
             self.rect.y = 723
             self.widget_rect.y = 726
@@ -235,6 +241,7 @@ class MenuWidget(Bar):
             self.rect.y = 429
             self.widget_rect.y = 431
             self.open = True
+            self.quit_rect.y = 642
             other.grabbed = None
 
     def dropped(self):
