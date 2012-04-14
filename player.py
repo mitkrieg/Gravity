@@ -59,7 +59,7 @@ class Player(Sprite):
             self.blackHoleCollision(False,True,True)
             
         if not self.alive:
-            if self.tailColorCounter == len(self.tailColors)-1:
+            if self.tailColorCounter == 5:
                 self.tailColorCounter = 0
             else:
                 self.tailColorCounter += 1
@@ -120,7 +120,9 @@ class Player(Sprite):
         self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
         self.newplace = self.goTo[0]
         self.makeANew = False
-        self.addTail = True
+        self.addTail = True  
+        self.lives = 3
+
 
 class Tails(Sprite):
     def __init__(self,group,color):

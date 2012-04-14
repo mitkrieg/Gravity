@@ -100,8 +100,8 @@ class Game(object):
                     self.player.refresh(4)
                 if evt.key == K_z:
                     self.player.refresh(5)
-            if evt.type == MOUSEBUTTONDOWN:
-                print pygame.mouse.get_pos()
+            #if evt.type == MOUSEBUTTONDOWN:
+             #   print pygame.mouse.get_pos()
             if evt.type == MOUSEBUTTONDOWN:
                 self.bar.collision_test(pygame.mouse.get_pos(),self.player)
             if evt.type == MOUSEBUTTONUP:
