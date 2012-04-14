@@ -77,13 +77,16 @@ class Player(Sprite):
         self.rect.x = x
         self.rect.y = y
         self.tail.reset()
+        self.tailGroup.empty()
         self.newplace = self.goTo[0]
         self.makeANew = False
+        self.tail.add_to()
 
 class Tails(Sprite):
     def __init__(self,group,color):
         Sprite.__init__(self)
         self.tail = []
+        self.group=group
         self.add(group)
         self.color = color
 
@@ -91,4 +94,8 @@ class Tails(Sprite):
         self.tail.append((x,y))
 
     def reset(self):
+        self.kill()
         self.tail = []
+        
+    def add_to(self):
+        self.add(self.group)
