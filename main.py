@@ -9,13 +9,14 @@ from goal import Goal
 from bar import *
 from starfield import Starfield
 from transitions import Intro, Transition
+from obstacles import BlackHole
 
 
 class Game(object):
     title = 'Gravity'
     screen_size = 1000, 750
     
-    def __init__(self,level=0):
+    def __init__(self,level=1):
         pygame.init()
         
         self.screen = pygame.display.set_mode(self.screen_size)
@@ -27,16 +28,19 @@ class Game(object):
         self.startItems = RenderUpdates()
         self.playerGroup = RenderUpdates()
         self.tails = RenderUpdates()
+        self.obstacles = RenderUpdates()
         self.goalCollide = Group()
         self.toolbar = OrderedUpdates()
         #self.intro_screen = Intro(0,0,self.startItems)
         self.bar = ToolBar(0,626,self.toolbar,self.screen,self)
-        self.goal = Goal(600,300,self.goalCollide)
+        self.goal = Goal(573,372,self.goalCollide)
         self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,750,self.tails)
         self.transition = Transition(-1314,0,self.screen,self.startItems)
         self.level = level
         self.levelUp = True
-        self.stars = Starfield(self.screen,1000,626,70)
+        self.stars = Starfield(self.screen,1000,626,200)
+        BlackHole(339,70,self.obstacles,self.screen,80,71)
+
 
     def quit(self):
         self.gameOver = False
@@ -92,8 +96,8 @@ class Game(object):
                     self.player.refresh(3)
                 if evt.key == K_t:
                     self.player.refresh(4)
-            #if evt.type == MOUSEBUTTONDOWN:
-               # print pygame.mouse.get_pos()
+            if evt.type == MOUSEBUTTONDOWN:
+                print pygame.mouse.get_pos()
             if evt.type == MOUSEBUTTONDOWN:
                 self.bar.collision_test(pygame.mouse.get_pos(),self.player)
             if evt.type == MOUSEBUTTONUP:
@@ -102,11 +106,13 @@ class Game(object):
 
      
         self.stars.draw()
+        self.obstacles.update()
         self.bar.update(pygame.mouse.get_pos())
         self.userPlacedObjects.update(self.screen)
         self.goalCollide.draw(self.screen)
         self.toolbar.draw(self.screen)
         self.player.drawTails()
+        self.obstacles.draw(self.screen)
         self.playerGroup.update()
         self.playerGroup.draw(self.screen)  
 
@@ -120,6 +126,8 @@ class Game(object):
                 
         if pygame.sprite.spritecollideany(self.player, self.goalCollide) != None:
             self.next_level()
+        elif pygame.sprite.spritecollideany(self.player,self.obstacles) != None:
+            self.player.blackHoleCollision(True,False)
 
         pygame.display.flip()
 
@@ -150,6 +158,7 @@ class Game(object):
             self.goalCollide.draw(self.screen)
             self.toolbar.draw(self.screen)
             self.player.drawTails()
+            self.obstacles.draw(self.screen)
             self.playerGroup.draw(self.screen)  
             self.startItems.draw(self.screen)
             if self.transition.rect.x > 1000:
@@ -184,7 +193,7 @@ class Game(object):
                 self.gameOver_tick()
 
 
-Game(1).run()
+Game().run()
 
 '''TODO'''
 ####GRAVITY OBJECTS (PLACEABLE/predefined)

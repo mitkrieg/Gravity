@@ -12,8 +12,9 @@ class Starfield(object):
         self.width = screenw
         self.max_stars = max_stars
         for i in range(self.max_stars):
-            star = [randrange(0,self.width-1),randrange(0,self.height-1),2]
-            star.append((170,170,170))
+            color = randrange(170,250)
+            star = [randrange(0,self.width-1),randrange(0,self.height-1),randrange(1,3)]
+            star.append((color,color,color))
             self.stars.append(star)
 
     def draw(self):
