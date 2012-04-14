@@ -36,6 +36,9 @@ class ToolBar(Bar):
     def lives_update(self):
         self.lives.update()
 
+    def reset_lives(self):
+        self.lives.reset()
+
     def update(self,pos):
         if self.grabbed != None:
             self.grabbed.update(pos,self)
@@ -151,6 +154,7 @@ class MenuWidget(Bar):
             self.widget_rect.y = 726
             self.open = False
 
+   
 class Lives(Bar):
     def __init__(self,x,y,friends,place,image=str('3lives.png')):
         Bar.__init__(self,x,y,friends,place,image)
@@ -168,3 +172,6 @@ class Lives(Bar):
             self.kill()
         self.next_life -= 1
 
+    def reset(self):
+        self.next_life = 2
+        self.image = self.three_lives

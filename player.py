@@ -16,7 +16,7 @@ class Player(Sprite):
         self.reset = x,y
         self.rect.y = y
         self.screen = surf
-        self.goTo = [(4,-3),(3,-3),(3,-1),(3,-1),(1,-3)]
+        self.goTo = [(4,-3),(3,-3),(3,-1),(3,-1),(1,-3),(5,0)]
         self.maxX = maxX
         self.maxY = maxY
         self.group = group
@@ -27,11 +27,37 @@ class Player(Sprite):
         self.tailColors = [(0,0,255),(0,114,54),(255,255,0),(237,28,36),(199,178,153),(158,0,93)]
         self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
         self.newplace = self.goTo[0]
+        self.addTail = True
+        self.alive = True
+        self.shrink = False
+        self.shrinkw = self.rect.w
+        self.shrinkh = self.rect.h
+        self.shrinkx = self.rect.x
+        self.shrinky = self.rect.y
+        self.shrinkTime = True
+        self.backup = self.image
 
 
 
-    def update(self):
-        self.alive = self.dead()
+    def update(self,boo=False):
+        self.dead(boo)
+        if self.shrink and self.shrinkw > 5:
+            if self.shrinkTime:
+                self.shrinkw -= 1
+                self.shrinkh -= 1
+                foo = pygame.transform.scale(self.image,(self.shrinkw,self.shrinkh))
+                foo = pygame.transform.rotate(foo,30)
+                self.rect.y -= 2
+                self.image = foo
+                self.shrinkTime = False
+                return
+            else:
+                self.shrinkTime = True
+        elif self.shrink:
+            self.image = self.backup
+            self.shrinkReset()
+            self.blackHoleCollision(False,True,True)
+            
         if not self.alive:
             if self.tailColorCounter == len(self.tailColors)-1:
                 self.tailColorCounter = 0
@@ -43,24 +69,33 @@ class Player(Sprite):
             self.lives -= 1
             self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
             self.remove(self.group)
+            self.alive = True
             
         elif self.makeANew:
-            self.tail.newSpace(self.rect.x,self.rect.y)
+            if self.addTail:
+                self.tail.newSpace(self.rect.x,self.rect.y)
             newX, newY = self.newplace
             self.rect.x += newX
             self.rect.y += newY
             
     def refresh(self,newplace):
         self.newplace = self.goTo[newplace]
+
+    def blackHoleCollision(self,shrink,tail,boo=False):
+        self.shrink = shrink
+        self.addTail = tail
+        self.update(boo)
         
 
-    def dead(self):
+    def dead(self, boo):
         if self.rect.x > self.maxX-self.rect.w or self.rect.x < 0:
-            return False
+            self.alive = False
         elif self.rect.y > self.maxY-self.rect.h or self.rect.y < 0:
-            return False
+            self.alive = False
+        elif not boo:
+            self.alive =  True
         else:
-            return True
+            self.alive = False
 
     def drawTails(self):
         for tail in self.tailGroup:
@@ -71,22 +106,26 @@ class Player(Sprite):
 
     def getPlayerPos(self):
         return self.rect.x, self.rect.y
+
+    def shrinkReset(self):
+        self.shrinkTime = True
+        self.shrinkw = self.rect.w
+        self.shrinkh = self.rect.h
             
     def restart(self):
         x,y = self.reset
         self.rect.x = x
         self.rect.y = y
-        self.tail.reset()
         self.tailGroup.empty()
+        self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
         self.newplace = self.goTo[0]
         self.makeANew = False
-        self.tail.add_to()
+        self.addTail = True
 
 class Tails(Sprite):
     def __init__(self,group,color):
         Sprite.__init__(self)
         self.tail = []
-        self.group=group
         self.add(group)
         self.color = color
 
@@ -94,8 +133,4 @@ class Tails(Sprite):
         self.tail.append((x,y))
 
     def reset(self):
-        self.kill()
         self.tail = []
-        
-    def add_to(self):
-        self.add(self.group)
