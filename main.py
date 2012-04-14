@@ -8,7 +8,7 @@ from player import Player
 from goal import Goal
 from bar import *
 from starfield import Starfield
-from transitions import Intro, Transition
+from transitions import Intro, Transition, GameOverScreen
 from obstacles import BlackHole
 
 
@@ -23,7 +23,6 @@ class Game(object):
         if self.title:
             pygame.display.set_caption(self.title)
         self.fps = 30
-        self.gameOver = False
         self.userPlacedObjects = Group()
         self.startItems = RenderUpdates()
         self.playerGroup = RenderUpdates()
@@ -45,7 +44,6 @@ class Game(object):
 
 
     def quit(self):
-        self.gameOver = False
         self.done = True
 
    
@@ -126,7 +124,10 @@ class Game(object):
             pygame.time.wait(750)
             self.player.add(self.playerGroup)
         elif len(self.playerGroup) == 0:
+            self.bar.score.update(-200)
             self.bar.lives_update()
+            self.over_screen = GameOverScreen(293,161,self.screen)
+            self.gameOver()
                 
         if pygame.sprite.spritecollideany(self.player, self.goalCollide) != None:
             self.next_level()
@@ -173,24 +174,38 @@ class Game(object):
             self.playerGroup.draw(self.screen)  
             self.startItems.draw(self.screen)
             if self.transition.rect.x > 1000:
+                self.transition.kill()
                 break
 
 
             pygame.display.flip()
         self.transition.reset(-1314)
 
-    def gameOver_tick(self):
-        self.clock.tick(self.fps)
-        
-        for evt in pygame.event.get():
-            if evt.type == QUIT:
-                self.quit()
-            if evt.type == KEYDOWN:
-                if evt.key == K_ESCAPE:
+    def gameOver(self):
+        overing = True
+        self.over_screen.draw()
+        while overing:
+            self.clock.tick(self.fps)
+            
+            for evt in pygame.event.get():
+                if evt.type == QUIT:
+                    overing = False
                     self.quit()
-                if evt.key == K_r:
-                    self.gameOver = False
-
+                if evt.type == KEYDOWN:
+                    if evt.key == K_ESCAPE:
+                        overing = False
+                        self.quit()
+                    if evt.key == K_RETURN:
+                        overing = False
+            
+            pygame.display.flip()
+        
+        self.player.add(self.playerGroup)
+        self.bar.reset_lives_over()
+        self.player.restart()
+        self.over_screen.kill()
+                
+                    
 
     def run(self,level=0):
         self.done = False
@@ -200,8 +215,7 @@ class Game(object):
                 self.level_0()
             while self.level >= 1 and not self.done:
                 self.tick()
-            while self.gameOver:
-                self.gameOver_tick()
+            
 
 
 Game().run()

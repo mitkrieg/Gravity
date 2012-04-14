@@ -37,7 +37,10 @@ class ToolBar(Bar):
         self.lives.update()
 
     def reset_lives(self):
-        self.lives.reset()
+        self.lives.back_to_three(False)
+
+    def reset_lives_over(self):
+        self.lives.back_to_three(True)
 
     def update(self,pos):
         if self.grabbed != None:
@@ -168,10 +171,15 @@ class Lives(Bar):
             self.image = self.two_lives
         elif self.next_life == 1:
             self.image = self.one_life
-        else:
-            self.kill()
         self.next_life -= 1
 
     def reset(self):
+        print "should work!"
         self.next_life = 2
         self.image = self.three_lives
+
+    def back_to_three(self,re_group):
+        self.next_life = 2
+        self.image = system.load_graphics('3lives.png')
+        if re_group:
+            self.add(self.group)

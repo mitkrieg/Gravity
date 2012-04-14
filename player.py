@@ -47,7 +47,9 @@ class Player(Sprite):
                 self.shrinkh -= 1
                 foo = pygame.transform.scale(self.image,(self.shrinkw,self.shrinkh))
                 foo = pygame.transform.rotate(foo,30)
-                self.rect.y -= 2
+                newX, newY = self.newplace
+                self.rect.x += newX
+                self.rect.y += newY
                 self.image = foo
                 self.shrinkTime = False
                 return

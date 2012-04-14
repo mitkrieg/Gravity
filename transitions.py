@@ -36,7 +36,7 @@ class Intro(Sprite):
         
         
 
-class Transition(Intro):
+class Transition(Sprite):
     def __init__(self,x,y,surface,group,image=str('transition.png')):
         Sprite.__init__(self)
         self.image = load_graphics(image)
@@ -63,3 +63,20 @@ class Transition(Intro):
 
     def add_to_group(self):
         self.add(self.group)
+
+class GameOverScreen(Sprite):
+    image = None
+    def __init__(self,x,y,surface,image=str('gameover.png')):
+        Sprite.__init__(self)
+        if self.image == None:
+            self.image = load_graphics(image)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.surface = surface
+        
+    def update(self):
+        pass
+
+    def draw(self):
+        self.surface.blit(self.image,(self.rect.x,self.rect.y))
