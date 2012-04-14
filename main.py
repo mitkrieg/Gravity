@@ -28,6 +28,7 @@ class Game(object):
         self.startItems = RenderUpdates()
         self.playerGroup = RenderUpdates()
         self.tails = RenderUpdates()
+        self.blackHoles = RenderUpdates()
         self.obstacles = RenderUpdates()
         self.goalCollide = Group()
         self.toolbar = OrderedUpdates()
@@ -39,7 +40,8 @@ class Game(object):
         self.level = level
         self.levelUp = True
         self.stars = Starfield(self.screen,1000,626,200)
-        BlackHole(339,70,self.obstacles,self.screen,80,71)
+        BlackHole(339,70,self.blackHoles,self.screen,80,71)
+        self.obstacles.add(self.blackHoles)
 
 
     def quit(self):
@@ -96,6 +98,8 @@ class Game(object):
                     self.player.refresh(3)
                 if evt.key == K_t:
                     self.player.refresh(4)
+                if evt.key == K_z:
+                    self.player.refresh(5)
             if evt.type == MOUSEBUTTONDOWN:
                 print pygame.mouse.get_pos()
             if evt.type == MOUSEBUTTONDOWN:
@@ -126,13 +130,15 @@ class Game(object):
                 
         if pygame.sprite.spritecollideany(self.player, self.goalCollide) != None:
             self.next_level()
-        elif pygame.sprite.spritecollideany(self.player,self.obstacles) != None:
+        elif pygame.sprite.spritecollideany(self.player,self.blackHoles) != None:
             self.player.blackHoleCollision(True,False)
 
         pygame.display.flip()
 
 
     def next_level(self):
+        if self.level < 2:
+            self.level += 1
         self.transition.add_to_group()
         changed = False
         while True:
@@ -147,10 +153,15 @@ class Game(object):
                         self.quit()
                         
             if self.transition.rect.x >= -50 and not changed:
-                self.goal.change_loc(600,60)
-                self.goal.change_image(str('venus.png'))
+                if self.level == 2:
+                    self.bar.reset_lives()
+                    self.bar.score.update(1000)
+                    self.goal.change_loc(600,60)
+                    self.goal.change_image(str('venus.png'))
+                    for hole in self.blackHoles:
+                        hole.move(792,458)
                 self.player.restart()
-                change = True
+                changed = True
                 
                 
             self.startItems.update()

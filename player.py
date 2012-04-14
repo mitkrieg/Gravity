@@ -16,7 +16,7 @@ class Player(Sprite):
         self.reset = x,y
         self.rect.y = y
         self.screen = surf
-        self.goTo = [(4,-3),(3,-3),(3,-1),(3,-1),(1,-3)]
+        self.goTo = [(4,-3),(3,-3),(3,-1),(3,-1),(1,-3),(5,0)]
         self.maxX = maxX
         self.maxY = maxY
         self.group = group
@@ -116,9 +116,11 @@ class Player(Sprite):
         x,y = self.reset
         self.rect.x = x
         self.rect.y = y
-        self.tail.reset()
+        self.tailGroup.empty()
+        self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
         self.newplace = self.goTo[0]
         self.makeANew = False
+        self.addTail = True
 
 class Tails(Sprite):
     def __init__(self,group,color):

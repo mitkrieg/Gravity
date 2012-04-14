@@ -22,7 +22,9 @@ class BlackHole(Sprite):
     def scale(self,w,h):
         return pygame.transform.scale(self.image, (w,h))
         
-        
+    def move(self,newx,newy):
+        self.rect.x = newx
+        self.rect.y = newy
 
     def update(self):
         pass
