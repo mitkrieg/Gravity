@@ -98,7 +98,10 @@ class ItemsTab(Bar):
             other.grabbed = None
         elif self.rect.x < -400:
             self.rect.x = -912
+<<<<<<< HEAD
             self.items_rect.x = 7
+=======
+>>>>>>> b3cbbc8f11cbf6b561b1f437a7ada93f2a0c0ada
             self.open = False
             other.grabbed = None
         

@@ -8,14 +8,21 @@ from player import Player
 from goal import Goal
 from bar import *
 from starfield import Starfield
+<<<<<<< HEAD
 from transitions import Intro, Transition
+=======
+>>>>>>> b3cbbc8f11cbf6b561b1f437a7ada93f2a0c0ada
 
 
 class Game(object):
     title = 'Gravity'
     screen_size = 1000, 750
     
+<<<<<<< HEAD
     def __init__(self,level=0):
+=======
+    def __init__(self):
+>>>>>>> b3cbbc8f11cbf6b561b1f437a7ada93f2a0c0ada
         pygame.init()
         
         self.screen = pygame.display.set_mode(self.screen_size)
@@ -24,11 +31,15 @@ class Game(object):
         self.fps = 30
         self.gameOver = False
         self.userPlacedObjects = Group()
+<<<<<<< HEAD
         self.startItems = RenderUpdates()
+=======
+>>>>>>> b3cbbc8f11cbf6b561b1f437a7ada93f2a0c0ada
         self.playerGroup = RenderUpdates()
         self.tails = RenderUpdates()
         self.goalCollide = Group()
         self.toolbar = OrderedUpdates()
+<<<<<<< HEAD
         #self.intro_screen = Intro(0,0,self.startItems)
         self.bar = ToolBar(0,626,self.toolbar,self.screen,self)
         self.goal = Goal(600,300,self.goalCollide)
@@ -36,11 +47,17 @@ class Game(object):
         self.transition = Transition(-1314,0,self.screen,self.startItems)
         self.level = level
         self.levelUp = True
+=======
+        self.bar = ToolBar(0,626,self.toolbar,self.screen,self)
+        self.goal = Goal(600,300,self.goalCollide)
+        self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,750,self.tails)
+>>>>>>> b3cbbc8f11cbf6b561b1f437a7ada93f2a0c0ada
         self.stars = Starfield(self.screen,1000,626,70)
 
     def quit(self):
         self.gameOver = False
         self.done = True
+<<<<<<< HEAD
 
    
     def level_0(self):
@@ -72,6 +89,9 @@ class Game(object):
 
         
 
+=======
+        
+>>>>>>> b3cbbc8f11cbf6b561b1f437a7ada93f2a0c0ada
     def tick(self):
         self.clock.tick(self.fps)
         pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
@@ -119,6 +139,7 @@ class Game(object):
             self.bar.lives_update()
                 
         if pygame.sprite.spritecollideany(self.player, self.goalCollide) != None:
+<<<<<<< HEAD
             self.next_level()
 
         pygame.display.flip()
@@ -159,6 +180,13 @@ class Game(object):
             pygame.display.flip()
         self.transition.reset(-1314)
 
+=======
+            self.done = True
+            self.gameOver = True
+
+        pygame.display.flip()
+
+>>>>>>> b3cbbc8f11cbf6b561b1f437a7ada93f2a0c0ada
     def gameOver_tick(self):
         self.clock.tick(self.fps)
         
@@ -168,6 +196,7 @@ class Game(object):
             if evt.type == KEYDOWN:
                 if evt.key == K_ESCAPE:
                     self.quit()
+<<<<<<< HEAD
                 if evt.key == K_r:
                     self.gameOver = False
 
@@ -192,6 +221,26 @@ Game(1).run()
 #SAVING
 #LOADING
 #LEVELS
+=======
+
+
+    def run(self):
+        self.done = False
+        self.clock = pygame.time.Clock()
+        while not self.done:
+            self.tick()
+        while self.gameOver:
+            self.gameOver_tick()
+
+Game().run()
+
+
+
+'''TODO'''
+#GRAVITY OBJECTS (PLACEABLE/predefined)
+#SCORE MECHANISM
+
+>>>>>>> b3cbbc8f11cbf6b561b1f437a7ada93f2a0c0ada
 
 
 '''DONE(ish)'''
