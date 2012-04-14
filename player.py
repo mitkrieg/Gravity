@@ -72,7 +72,6 @@ class Player(Sprite):
     def getPlayerPos(self):
         return self.rect.x, self.rect.y
             
-<<<<<<< HEAD
     def restart(self):
         x,y = self.reset
         self.rect.x = x
@@ -80,8 +79,6 @@ class Player(Sprite):
         self.tail.reset()
         self.newplace = self.goTo[0]
         self.makeANew = False
-=======
->>>>>>> b3cbbc8f11cbf6b561b1f437a7ada93f2a0c0ada
 
 class Tails(Sprite):
     def __init__(self,group,color):
@@ -92,9 +89,6 @@ class Tails(Sprite):
 
     def newSpace(self,x,y):
         self.tail.append((x,y))
-<<<<<<< HEAD
 
     def reset(self):
         self.tail = []
-=======
->>>>>>> b3cbbc8f11cbf6b561b1f437a7ada93f2a0c0ada
