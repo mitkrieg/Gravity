@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import *
 from pygame.sprite import Sprite, Group
 from goal import Goal
+from user_items import UserPlanet
 
 
 class Bar(Sprite):
@@ -31,6 +32,7 @@ class ToolBar(Bar):
         self.itemsTab = ItemsTab(self.rect.x-912,self.rect.y+15,self.group,self.screen,-917,-954,-3)
         self.game = other
         self.grabbed = None
+        self.items_one = pygame.Rect(119,667,55,45)
                 
 
     def lives_update(self):
@@ -60,7 +62,17 @@ class ToolBar(Bar):
             self.grabbed = self.menuWidget
         elif self.menuWidget.quit_rect.collidepoint(pos):
             self.game.quit()
+        elif self.items_one.collidepoint(pos) and self.itemsTab.open:
+            x,y = pos
+            x -= 30
+            y -= 30
+            self.grabbed = UserPlanet(x,y,60,60,5,self.game.userPlacedObjects,self.group,str('rockplanet.png'))
         
+    def change_goal(self,image):
+        self.barGoal.change_image(image)
+        self.barGoal.resize(40,40)
+        
+    
 class Score(Sprite):
     def __init__(self,x,y,group,surf,start_score,size,color):
         Sprite.__init__(self)

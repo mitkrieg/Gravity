@@ -14,25 +14,36 @@ class Intro(Sprite):
         self.rect.x = 0
         self.rect.y = 0
         self.group = group
-        self.move = False
+        self.starting = False
+        self.instructions = False
         self.add(group)
 
     def update(self):
-        if self.move and self.rect.y > -750:
+        if self.starting and self.rect.y > -750:
             self.rect.y -= 30
+        elif self.instructions and self.rect.x > -1000:
+            self.rect.x -= 40
+        elif not self.instructions and self.rect.x < 0:
+            self.rect.x += 40
             
 
     def next_level(self):
-        if self.move and self.rect.y > -750:
+        if self.starting and self.rect.y > -750:
             return False
-        elif self.move:
+        elif self.starting:
             self.kill()
             return True
         else:
             return False
 
     def begin(self):
-        self.move = True
+        self.starting = True
+
+    def instruct(self,boo):
+        if boo:
+            self.instructions = True
+        else:
+            self.instructions = False
         
         
 
