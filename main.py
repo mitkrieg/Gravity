@@ -87,34 +87,36 @@ class Game(object):
         pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
         pos = pygame.mouse.get_pos()
 
+        #inputs queue
         for evt in pygame.event.get():
             if evt.type == QUIT:
                 self.quit()
-            if evt.type == KEYDOWN:
+            elif evt.type == KEYDOWN:
                 if evt.key == K_ESCAPE:
                     self.quit()
-                if evt.key == K_q:
+                elif evt.key == K_q:
                     self.player.refresh(0)
-                if evt.key == K_w:
+                elif evt.key == K_w:
                     self.player.refresh(1)
-                if evt.key == K_e:
+                elif evt.key == K_e:
                     self.player.refresh(2)
-                if evt.key == K_r:
+                elif evt.key == K_r:
                     self.player.refresh(3)
-                if evt.key == K_t:
+                elif evt.key == K_t:
                     self.player.refresh(4)
-                if evt.key == K_z:
+                elif evt.key == K_z:
                     self.player.refresh(5)
-            if evt.type == MOUSEBUTTONDOWN:
-                print pos
-            if evt.type == MOUSEBUTTONDOWN:
+            elif evt.type == MOUSEBUTTONDOWN:
+                #print pos
                 self.bar.collision_test(pos,self.player)
-                for obj in self.userPlacedObjects:
-                    if obj.rect.collidepoint(pos):
-                        print 'collidin'
-                        obj.grab()
-                #####print evt.button
-            if evt.type == MOUSEBUTTONUP:
+                if evt.button == 1:
+                    for obj in self.userPlacedObjects:
+                        if obj.rect.collidepoint(pos):
+                            obj.grab(pos)
+                elif evt.button == 3:
+                    print 'info'
+                #print evt.button
+            elif evt.type == MOUSEBUTTONUP:
                 self.bar.clear_grabbed()
                 for obj in self.userPlacedObjects:
                     obj.drop()

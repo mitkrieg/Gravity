@@ -6,7 +6,7 @@ from pygame.sprite import Sprite, Group
 
 import math
 
-GRAVITYCO = 9e2
+GRAVITYCO = 2e2
 
 class Player(Sprite):
 

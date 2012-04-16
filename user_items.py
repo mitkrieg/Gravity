@@ -16,20 +16,24 @@ class UserPlanet(Sprite):
         self.rect.x = x
         self.rect.y = y
         self.mass = start_mass
+        self.reGroup = False
         self.group = group
         self.grabbed = True
-        self.mouse_offset = 26
+        self.mouse_offset = ((26,26))
+        self.temp = temp
         self.add(temp)
-        
-        
+                
     def update(self,pos,other=None):
-        x,y = pos
-        x -= self.mouse_offset
-        y -= self.mouse_offset
-        if x >= 1 and x <= 999 and y >= 1 and self.grabbed:
-            self.rect.x = x
-            self.rect.y = y
-
+        xchange,ychange = pos
+        xoff,yoff = self.mouse_offset
+        newX = xchange-xoff
+        newY = ychange-yoff
+        if newX >= 1 and newX <= 999 and newY >= 1 and self.grabbed:
+            self.rect.x = newX
+            self.rect.y = newY
+        if self.rect.y+self.rect.h < 620 and self.reGroup == False:
+            self.reGroup = True
+        
     def collision_test(self,pos):
         print 'testin'
 
@@ -38,8 +42,17 @@ class UserPlanet(Sprite):
         self.kill()
         self.add(self.group)
     
-    def grab(self):
+    def grab(self,pos):
+        x,y = pos
+        xoffset = x-self.rect.x
+        yoffset = y-self.rect.y
+        self.mouse_offset = ((xoffset,yoffset))
         self.grabbed = True
 
     def drop(self):
         self.grabbed = False
+        if self.rect.y > 628 and self.reGroup == True:
+            self.kill()
+
+    def draw(self,surf):
+        surf.blit(self.image,(self.rect.x,self.rect.y))
