@@ -34,7 +34,7 @@ moving = False
 
 
 #PlanetGroup
-planetGroup = [Planet(16,(50,50),GREEN),Planet(50,(100,100),BLUE)]
+planetGroup = [Planet(16,(50,50),GREEN),Planet(50,(100,100),BLUE),Planet(30,(200,200),(90,90,0)),Planet(6,(6,6),(120,40,20))]
 grabbed = None
 player = Player((1,1),playerpos,RED)
 
