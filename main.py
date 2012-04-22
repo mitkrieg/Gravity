@@ -93,7 +93,7 @@ class Game(object):
                 self.quit()
             elif evt.type == KEYDOWN:
                 if evt.key == K_ESCAPE:
-                    self.quit()
+                    self.bar.grabbed = self.bar.menuWidget
                 elif evt.key == K_q:
                     self.player.refresh(0)
                 elif evt.key == K_w:
@@ -106,6 +106,9 @@ class Game(object):
                     self.player.refresh(4)
                 elif evt.key == K_z:
                     self.player.refresh(5)
+            elif evt.type == KEYUP:
+                if evt.key == K_ESCAPE:
+                    self.bar.clear_grabbed()
             elif evt.type == MOUSEBUTTONDOWN:
                 #print pos
                 self.bar.collision_test(pos,self.player)
