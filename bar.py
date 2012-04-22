@@ -32,7 +32,9 @@ class ToolBar(Bar):
         self.itemsTab = ItemsTab(self.rect.x-912,self.rect.y+15,self.group,self.screen,-917,-954,-3)
         self.game = other
         self.grabbed = None
-        self.items_one = pygame.Rect(119,667,55,45)
+        self.items_reset()
+        self.items_one_limit = 1
+        self.items_one_placed = 0
                 
 
     def lives_update(self):
@@ -62,11 +64,19 @@ class ToolBar(Bar):
             self.grabbed = self.menuWidget
         elif self.menuWidget.quit_rect.collidepoint(pos):
             self.game.quit()
-        elif self.items_one.collidepoint(pos) and self.itemsTab.open:
+        elif self.items_one.collidepoint(pos) and self.itemsTab.open and self.items_one_placed < self.items_one_limit:
             x,y = pos
             x -= 30
             y -= 30
-            self.grabbed = UserPlanet(x,y,60,60,25,self.game.userPlacedObjects,self.group,self.game.obstacles,str('rockplanet.png'))
+            self.grabbed = UserPlanet(x,y,60,60,25,self.game.userPlacedObjects,self.group,self.game.obstacles,self,str('rockplanet.png'))
+            self.items_one_placed += 1
+            if self.items_one_placed >= self.items_one_limit:
+                self.items_one.x = -30
+
+    def items_reset(self,one=1):
+        self.items_one_placed = 0
+        self.items_one_limit = one
+        self.items_one = pygame.Rect(119,667,55,45)
         
     def change_goal(self,image):
         self.barGoal.change_image(image)

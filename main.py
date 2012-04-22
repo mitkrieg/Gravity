@@ -10,6 +10,7 @@ from bar import *
 from starfield import Starfield
 from transitions import Intro, Transition, GameOverScreen
 from obstacles import BlackHole
+from user_items import UserPlanet
 import sys
 
 
@@ -93,8 +94,9 @@ class Game(object):
             if evt.type == QUIT:
                 self.quit()
             elif evt.type == KEYDOWN:
-                #if evt.key == K_ESCAPE:
-                 #   self.bar.grabbed = self.bar.menuWidget
+                if evt.key == K_ESCAPE:
+                    self.quit()
+                #    self.bar.grabbed = self.bar.menuWidget
                 '''
                 elif evt.key == K_q:
                     self.player.refresh(0)
@@ -108,7 +110,7 @@ class Game(object):
                     self.player.refresh(4)
                 '''
                 if evt.key == K_z:
-                    print len(self.obstacles)
+                    print len(self.userPlacedObjects)
                 
             elif evt.type == KEYUP:
                 if evt.key == K_ESCAPE:
@@ -147,7 +149,6 @@ class Game(object):
             self.bar.score.update(-200)
             pygame.time.wait(750)
             self.player.add(self.playerGroup)
-            print "added and runnin"
         elif len(self.playerGroup) == 0:
             self.bar.score.update(-200)
             self.bar.lives_update()
@@ -159,6 +160,8 @@ class Game(object):
         elif pygame.sprite.spritecollideany(self.player,self.blackHoles) != None:
             self.player.blackHoleCollision(True,False)
 
+        elif pygame.sprite.spritecollideany(self.player,self.userPlacedObjects) != None:
+            self.player.update(True)
         pygame.display.flip()
 
 
@@ -186,6 +189,7 @@ class Game(object):
                     self.goal.change_image(str('venus.png'))
                     self.bar.change_goal(str('venus.png'))
                     self.userPlacedObjects.empty()
+                    self.bar.items_reset(2)
                     for hole in self.blackHoles:
                         hole.move(792,458)
                 self.player.restart()

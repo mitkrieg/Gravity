@@ -92,7 +92,7 @@ class Player(Sprite):
             self.vx,self.vy = self.start_vec
             self.vxi,self.vyi = self.start_vec
             self.alive = True
-            print "end seq"
+           
             
         elif self.makeANew:
             self.resetAccel()
@@ -123,7 +123,6 @@ class Player(Sprite):
         elif not boo:
             self.alive =  True
         else:
-            print "not alive still"
             self.alive = False
 
     def drawTails(self):
@@ -150,6 +149,9 @@ class Player(Sprite):
         self.makeANew = False
         self.addTail = True  
         self.lives = 3
+        self.resetAccel()
+        self.vx,self.vy = self.start_vec
+        self.vxi,self.vyi = self.start_vec
 
 
 class Tails(Sprite):
