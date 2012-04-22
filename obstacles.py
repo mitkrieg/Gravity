@@ -7,7 +7,7 @@ import system
 
 class BlackHole(Sprite):
     image = None
-    def __init__(self,x,y,group,surf,w,h,image=str('black_hole.png')):
+    def __init__(self,x,y,group,surf,w,h,mass,image=str('black_hole.png')):
         Sprite.__init__(self)
         if self.image == None:
             self.image = system.load_graphics(image)
@@ -17,6 +17,7 @@ class BlackHole(Sprite):
         self.rect.y = y
         self.group = group
         self.add(self.group)
+        self.mass = mass
         self.surface = surf
 
     def scale(self,w,h):

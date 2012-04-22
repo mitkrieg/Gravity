@@ -10,6 +10,7 @@ from bar import *
 from starfield import Starfield
 from transitions import Intro, Transition, GameOverScreen
 from obstacles import BlackHole
+from user_items import UserPlanet
 import sys
 
 
@@ -35,14 +36,15 @@ class Game(object):
         if level == 0:
             self.intro_screen = Intro(0,0,self.startItems)
         self.bar = ToolBar(0,626,self.toolbar,self.screen,self)
-        self.goal = Goal(573,372,self.goalCollide)
-        self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,750,self.tails)
+        self.goal = Goal(573,372,self.goalCollide,30)
+        self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,624,(2,-2),self.tails,self)
         self.transition = Transition(-1314,0,self.screen,self.startItems)
         self.level = level
         self.levelUp = True
         self.stars = Starfield(self.screen,1000,626,200)
-        BlackHole(339,70,self.blackHoles,self.screen,80,71)
+        BlackHole(339,70,self.blackHoles,self.screen,80,71,16)
         self.obstacles.add(self.blackHoles)
+        self.obstacles.add(self.goalCollide)
       
     def quit(self):
         self.done = True
@@ -74,7 +76,7 @@ class Game(object):
         self.goalCollide.draw(self.screen)
         self.toolbar.draw(self.screen)
         self.playerGroup.draw(self.screen)
-        self.obstacles.draw(self.screen)
+        self.blackHoles.draw(self.screen)
         self.startItems.draw(self.screen)
         
 
@@ -87,34 +89,43 @@ class Game(object):
         pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
         pos = pygame.mouse.get_pos()
 
+        #inputs queue
         for evt in pygame.event.get():
             if evt.type == QUIT:
                 self.quit()
-            if evt.type == KEYDOWN:
+            elif evt.type == KEYDOWN:
                 if evt.key == K_ESCAPE:
                     self.quit()
-                if evt.key == K_q:
+                #    self.bar.grabbed = self.bar.menuWidget
+                '''
+                elif evt.key == K_q:
                     self.player.refresh(0)
-                if evt.key == K_w:
+                elif evt.key == K_w:
                     self.player.refresh(1)
-                if evt.key == K_e:
+                elif evt.key == K_e:
                     self.player.refresh(2)
-                if evt.key == K_r:
+                elif evt.key == K_r:
                     self.player.refresh(3)
-                if evt.key == K_t:
+                elif evt.key == K_t:
                     self.player.refresh(4)
+                '''
                 if evt.key == K_z:
-                    self.player.refresh(5)
-            if evt.type == MOUSEBUTTONDOWN:
-                print pos
-            if evt.type == MOUSEBUTTONDOWN:
+                    print len(self.userPlacedObjects)
+                
+            elif evt.type == KEYUP:
+                if evt.key == K_ESCAPE:
+                    self.bar.clear_grabbed()
+            elif evt.type == MOUSEBUTTONDOWN:
+                #print pos
                 self.bar.collision_test(pos,self.player)
-                for obj in self.userPlacedObjects:
-                    if obj.rect.collidepoint(pos):
-                        print 'collidin'
-                        obj.grab()
-                #####print evt.button
-            if evt.type == MOUSEBUTTONUP:
+                if evt.button == 1:
+                    for obj in self.userPlacedObjects:
+                        if obj.rect.collidepoint(pos):
+                            obj.grab(pos)
+                elif evt.button == 3:
+                    print 'info'
+                #print evt.button
+            elif evt.type == MOUSEBUTTONUP:
                 self.bar.clear_grabbed()
                 for obj in self.userPlacedObjects:
                     obj.drop()
@@ -122,12 +133,12 @@ class Game(object):
 
      
         self.stars.draw()
-        self.obstacles.update()
+        self.blackHoles.update()
         self.bar.update(pos)
         self.userPlacedObjects.update(pos)
         self.userPlacedObjects.draw(self.screen)
         self.goalCollide.draw(self.screen)
-        self.obstacles.draw(self.screen)
+        self.blackHoles.draw(self.screen)
         self.toolbar.draw(self.screen)
         self.player.drawTails()
         self.playerGroup.update()
@@ -149,6 +160,8 @@ class Game(object):
         elif pygame.sprite.spritecollideany(self.player,self.blackHoles) != None:
             self.player.blackHoleCollision(True,False)
 
+        elif pygame.sprite.spritecollideany(self.player,self.userPlacedObjects) != None:
+            self.player.update(True)
         pygame.display.flip()
 
 
@@ -176,6 +189,7 @@ class Game(object):
                     self.goal.change_image(str('venus.png'))
                     self.bar.change_goal(str('venus.png'))
                     self.userPlacedObjects.empty()
+                    self.bar.items_reset(2)
                     for hole in self.blackHoles:
                         hole.move(792,458)
                 self.player.restart()
@@ -188,7 +202,7 @@ class Game(object):
             self.userPlacedObjects.draw(self.screen)
             self.toolbar.draw(self.screen)
             self.player.drawTails()
-            self.obstacles.draw(self.screen)
+            self.blackHoles.draw(self.screen)
             self.playerGroup.draw(self.screen)  
             self.startItems.draw(self.screen)
             if self.transition.rect.x > 1000:
@@ -248,9 +262,10 @@ Game(level).run()
 
 '''TODO'''
 #INSTRUCTIONS OPTION IN MENU WIDGET
-#RIGHT CLICK FOR EDITING OBJECT
-####GRAVITY OBJECTS (PLACEABLE/predefined)
-####OTHER OBSTACLES (enemy ships)
+#####WARNING FOR ITEM LIMIT###
+#####RIGHT CLICK FOR EDITING OBJECT
+#USER PLACED COLLISIONS
+#OTHER OBSTACLES (enemy ships)
 #SAVING
 #LOADING
 #LEVELS

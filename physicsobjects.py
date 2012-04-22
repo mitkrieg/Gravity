@@ -6,7 +6,11 @@ from pygame.sprite import Sprite, Group
 
 import math
 
+<<<<<<< HEAD
 GRAVITYCO = 2e2
+=======
+GRAVITYCO = 1e2
+>>>>>>> 3281f08e8c99ea707bf431bc39b36cb23e6274cc
 
 class Player(Sprite):
 
@@ -39,7 +43,7 @@ class Player(Sprite):
         force = GRAVITYCO*planet.mass/dsq if dsq>1e-10 else 0
         self.ax += force*dx/dist
         self.ay += force*dy/dist
-        print self.ax,self.ay
+        
 
     def update(self):
         self.xpos += self.vx

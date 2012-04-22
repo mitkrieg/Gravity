@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 import system
 import pygame
+import math
 from pygame.locals import *
 from pygame.sprite import Sprite, Group
 
 class Player(Sprite):
+    gravity_co = 1e2
     image = None
-    def __init__(self,x,y,surf,color,group,maxX,maxY,tail):
+    def __init__(self,x,y,surf,color,group,maxX,maxY,start_vec,tail,game):
         Sprite.__init__(self)
         if self.image == None:
             self.image = system.load_graphics(str('pnvscaled.png'))
@@ -16,7 +18,6 @@ class Player(Sprite):
         self.reset = x,y
         self.rect.y = y
         self.screen = surf
-        self.goTo = [(4,-3),(3,-3),(3,-1),(3,-1),(1,-3),(5,0)]
         self.maxX = maxX
         self.maxY = maxY
         self.group = group
@@ -26,7 +27,6 @@ class Player(Sprite):
         self.tailColorCounter = 0
         self.tailColors = [(0,0,255),(0,114,54),(255,255,0),(237,28,36),(199,178,153),(158,0,93)]
         self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
-        self.newplace = self.goTo[0]
         self.addTail = True
         self.alive = True
         self.shrink = False
@@ -36,8 +36,26 @@ class Player(Sprite):
         self.shrinky = self.rect.y
         self.shrinkTime = True
         self.backup = self.image
-
-
+        self.start_vec = start_vec
+        self.vx,self.vy = start_vec
+        self.vxi,self.vyi = start_vec
+        self.ax = 0
+        self.ay = 0
+        self.game = game
+            
+    def resetAccel(self):
+        self.ax=0
+        self.ay=0
+        
+    def addAccel(self,planet):
+        planx,plany = planet.rect.center 
+        dx = planx - self.rect.x
+        dy = plany - self.rect.y
+        dsq = dx*dx + dy*dy
+        dist = math.sqrt(dsq)
+        force = self.gravity_co*planet.mass/dsq if dsq>1e-10 else 0
+        self.ax += force*dx/dist
+        self.ay += force*dy/dist
 
     def update(self,boo=False):
         self.dead(boo)
@@ -47,9 +65,8 @@ class Player(Sprite):
                 self.shrinkh -= 1
                 foo = pygame.transform.scale(self.image,(self.shrinkw,self.shrinkh))
                 foo = pygame.transform.rotate(foo,30)
-                newX, newY = self.newplace
-                self.rect.x += newX
-                self.rect.y += newY
+                self.rect.x += self.ax
+                self.rect.y += self.ay
                 self.image = foo
                 self.shrinkTime = False
                 return
@@ -71,14 +88,23 @@ class Player(Sprite):
             self.lives -= 1
             self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
             self.remove(self.group)
+            self.resetAccel()
+            self.vx,self.vy = self.start_vec
+            self.vxi,self.vyi = self.start_vec
             self.alive = True
+           
             
         elif self.makeANew:
+            self.resetAccel()
+            for planet in self.game.obstacles:
+                self.addAccel(planet)
             if self.addTail:
-                self.tail.newSpace(self.rect.x,self.rect.y)
-            newX, newY = self.newplace
-            self.rect.x += newX
-            self.rect.y += newY
+                self.tail.newSpace(self.rect.x,self.rect.y,self.ax,self.ay)
+            self.rect.x += self.vx
+            self.rect.y += self.vy
+            self.vx += self.ax
+            self.vy += self.ay
+            
             
     def refresh(self,newplace):
         self.newplace = self.goTo[newplace]
@@ -103,8 +129,8 @@ class Player(Sprite):
         for tail in self.tailGroup:
             color = tail.color
             for coordinates in tail.tail:
-                x,y = coordinates
-                pygame.draw.line(self.screen,color,(x+17,y+6),(x+17,y+6),3)
+                x,y,w,h = coordinates
+                pygame.draw.line(self.screen,color,(x+17,y+6),(x+18,y+8),3)
 
     def getPlayerPos(self):
         return self.rect.x, self.rect.y
@@ -120,10 +146,12 @@ class Player(Sprite):
         self.rect.y = y
         self.tailGroup.empty()
         self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
-        self.newplace = self.goTo[0]
         self.makeANew = False
         self.addTail = True  
         self.lives = 3
+        self.resetAccel()
+        self.vx,self.vy = self.start_vec
+        self.vxi,self.vyi = self.start_vec
 
 
 class Tails(Sprite):
@@ -133,8 +161,8 @@ class Tails(Sprite):
         self.add(group)
         self.color = color
 
-    def newSpace(self,x,y):
-        self.tail.append((x,y))
+    def newSpace(self,x,y,w,h):
+        self.tail.append((x,y,w,h))
 
     def reset(self):
         self.tail = []
