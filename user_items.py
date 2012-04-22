@@ -7,7 +7,7 @@ import system
 
 class UserPlanet(Sprite):
     image = None
-    def __init__(self,x,y,w,h,start_mass,group,temp,image):
+    def __init__(self,x,y,w,h,start_mass,group,temp,obstacles_grp,image):
         Sprite.__init__(self)
         if self.image == None:
             self.image = system.load_graphics(image)
@@ -22,6 +22,7 @@ class UserPlanet(Sprite):
         self.mouse_offset = ((26,26))
         self.temp = temp
         self.add(temp)
+        self.ob_grp = obstacles_grp
                 
     def update(self,pos,other=None):
         xchange,ychange = pos
@@ -41,6 +42,7 @@ class UserPlanet(Sprite):
         self.grabbed = False
         self.kill()
         self.add(self.group)
+        self.add(self.ob_grp)
     
     def grab(self,pos):
         x,y = pos

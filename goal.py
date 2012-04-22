@@ -6,7 +6,7 @@ from pygame.sprite import Sprite
 
 class Goal(Sprite):
     image = None
-    def __init__(self,x,y,group):
+    def __init__(self,x,y,group,mass=0):
         Sprite.__init__(self)
         if self.image == None:
             self.image = system.load_graphics('earth.png')
@@ -14,6 +14,7 @@ class Goal(Sprite):
         self.rect.x = x
         self.rect.y = y
         self.group = group
+        self.mass = mass
         self.add(group)
 
     def resize(self,w,h):

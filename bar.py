@@ -66,7 +66,7 @@ class ToolBar(Bar):
             x,y = pos
             x -= 30
             y -= 30
-            self.grabbed = UserPlanet(x,y,60,60,5,self.game.userPlacedObjects,self.group,str('rockplanet.png'))
+            self.grabbed = UserPlanet(x,y,60,60,25,self.game.userPlacedObjects,self.group,self.game.obstacles,str('rockplanet.png'))
         
     def change_goal(self,image):
         self.barGoal.change_image(image)

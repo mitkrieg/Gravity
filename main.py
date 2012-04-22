@@ -35,14 +35,15 @@ class Game(object):
         if level == 0:
             self.intro_screen = Intro(0,0,self.startItems)
         self.bar = ToolBar(0,626,self.toolbar,self.screen,self)
-        self.goal = Goal(573,372,self.goalCollide)
-        self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,750,self.tails)
+        self.goal = Goal(573,372,self.goalCollide,30)
+        self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,624,(2,-2),self.tails,self)
         self.transition = Transition(-1314,0,self.screen,self.startItems)
         self.level = level
         self.levelUp = True
         self.stars = Starfield(self.screen,1000,626,200)
-        BlackHole(339,70,self.blackHoles,self.screen,80,71)
+        BlackHole(339,70,self.blackHoles,self.screen,80,71,16)
         self.obstacles.add(self.blackHoles)
+        self.obstacles.add(self.goalCollide)
       
     def quit(self):
         self.done = True
@@ -74,7 +75,7 @@ class Game(object):
         self.goalCollide.draw(self.screen)
         self.toolbar.draw(self.screen)
         self.playerGroup.draw(self.screen)
-        self.obstacles.draw(self.screen)
+        self.blackHoles.draw(self.screen)
         self.startItems.draw(self.screen)
         
 
@@ -92,8 +93,9 @@ class Game(object):
             if evt.type == QUIT:
                 self.quit()
             elif evt.type == KEYDOWN:
-                if evt.key == K_ESCAPE:
-                    self.bar.grabbed = self.bar.menuWidget
+                #if evt.key == K_ESCAPE:
+                 #   self.bar.grabbed = self.bar.menuWidget
+                '''
                 elif evt.key == K_q:
                     self.player.refresh(0)
                 elif evt.key == K_w:
@@ -104,8 +106,10 @@ class Game(object):
                     self.player.refresh(3)
                 elif evt.key == K_t:
                     self.player.refresh(4)
-                elif evt.key == K_z:
-                    self.player.refresh(5)
+                '''
+                if evt.key == K_z:
+                    print len(self.obstacles)
+                
             elif evt.type == KEYUP:
                 if evt.key == K_ESCAPE:
                     self.bar.clear_grabbed()
@@ -127,12 +131,12 @@ class Game(object):
 
      
         self.stars.draw()
-        self.obstacles.update()
+        self.blackHoles.update()
         self.bar.update(pos)
         self.userPlacedObjects.update(pos)
         self.userPlacedObjects.draw(self.screen)
         self.goalCollide.draw(self.screen)
-        self.obstacles.draw(self.screen)
+        self.blackHoles.draw(self.screen)
         self.toolbar.draw(self.screen)
         self.player.drawTails()
         self.playerGroup.update()
@@ -143,6 +147,7 @@ class Game(object):
             self.bar.score.update(-200)
             pygame.time.wait(750)
             self.player.add(self.playerGroup)
+            print "added and runnin"
         elif len(self.playerGroup) == 0:
             self.bar.score.update(-200)
             self.bar.lives_update()
@@ -193,7 +198,7 @@ class Game(object):
             self.userPlacedObjects.draw(self.screen)
             self.toolbar.draw(self.screen)
             self.player.drawTails()
-            self.obstacles.draw(self.screen)
+            self.blackHoles.draw(self.screen)
             self.playerGroup.draw(self.screen)  
             self.startItems.draw(self.screen)
             if self.transition.rect.x > 1000:
@@ -253,9 +258,9 @@ Game(level).run()
 
 '''TODO'''
 #INSTRUCTIONS OPTION IN MENU WIDGET
-#RIGHT CLICK FOR EDITING OBJECT
-####GRAVITY OBJECTS (PLACEABLE/predefined)
-####OTHER OBSTACLES (enemy ships)
+#####RIGHT CLICK FOR EDITING OBJECT
+#USER PLACED COLLISIONS
+#OTHER OBSTACLES (enemy ships)
 #SAVING
 #LOADING
 #LEVELS
