@@ -258,7 +258,7 @@ class Game(object):
 if len(sys.argv) > 1:
     level = sys.argv[1]
 else:
-    level = 1
+    level = 0
 
 level = int(level)
 
