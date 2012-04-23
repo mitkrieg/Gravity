@@ -263,16 +263,20 @@ level = int(level)
 
 Game(level).run()
 
+'''Pylygon Methods'''
+#http://www.pygame.org/project-pylygon-1718-.html
+
 '''TODO'''
 #INSTRUCTIONS OPTION IN MENU WIDGET
 #####WARNING FOR ITEM LIMIT###
 #####RIGHT CLICK FOR EDITING OBJECT
-#USER PLACED COLLISIONS
-#OTHER OBSTACLES (enemy ships)
+#OTHER OBSTACLES (enemy ships, asteroids, comets)
 #SAVING
 #LOADING
 #LEVELS
 
+'''BUGS'''
+#USER PLACING OBJECT ON TOP OF PLAYER, FREAKS OUT!
 
 '''DONE(ish)'''
 #PLAYER TRAIL
