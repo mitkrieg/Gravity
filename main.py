@@ -184,7 +184,7 @@ class Game(object):
             if self.transition.rect.x >= -50 and not changed:
                 if self.level == 2:
                     self.bar.reset_lives()
-                    self.bar.score.update(1000)
+                    self.bar.score.update(2000)
                     self.goal.change_loc(600,60)
                     self.goal.change_image(str('venus.png'))
                     self.bar.change_goal(str('venus.png'))
@@ -215,6 +215,9 @@ class Game(object):
 
     def gameOver(self):
         overing = True
+        self.bar.lives_over()
+        self.bar.update()
+        self.toolbar.draw(self.screen)
         self.over_screen.draw()
         while overing:
             self.clock.tick(self.fps)

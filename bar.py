@@ -23,12 +23,13 @@ class Bar(Sprite):
 class ToolBar(Bar):
     def __init__(self,x,y,friends,place,other,image=str('taskbar.png')):
         Bar.__init__(self,x,y,friends,place,image)
-        self.lives = Lives(self.rect.x+402,self.rect.y+71,self.group,self.screen)
+        self.lives = Lives(self.rect.x+353,self.rect.y+71,self.group,self.screen,str('5lives.png'))
         self.goRect = pygame.Rect(717,658,118,75)
         self.barGoal = Goal(self.rect.x+605,self.rect.y+70,self.group)
         self.barGoal.resize(40,40)
-        self.score = Score(250,665,friends,self.screen,1000,26,(0,0,0))
-        self.menuWidget = MenuWidget(self.rect.x+690,723,self.group,self.screen)
+        self.score = Score(250,665,friends,self.screen,2000,26,(0,0,0))
+        self.arrow = Arrow(872,665,friends,self.screen)
+        self.menuWidget = MenuWidget(self.rect.x+694,723,self.group,self.screen,self.arrow)
         self.itemsTab = ItemsTab(self.rect.x-912,self.rect.y+15,self.group,self.screen,-917,-954,-3)
         self.game = other
         self.grabbed = None
@@ -36,6 +37,8 @@ class ToolBar(Bar):
         self.items_one_limit = 1
         self.items_one_placed = 0
                 
+    def lives_over(self):
+        self.lives.no_lives()
 
     def lives_update(self):
         self.lives.update()
@@ -46,7 +49,7 @@ class ToolBar(Bar):
     def reset_lives_over(self):
         self.lives.back_to_three(True)
 
-    def update(self,pos):
+    def update(self,pos=(0,0)):
         if self.grabbed != None:
             self.grabbed.update(pos,self)
 
@@ -141,11 +144,14 @@ class ItemsTab(Bar):
             self.open = False
 
 class MenuWidget(Bar):
-    def __init__(self,x,y,friends,place,image=str('widget.png')):
+    def __init__(self,x,y,friends,place,arrow,image=str('widget.png')):
         Bar.__init__(self,x,y,friends,place,image)
-        self.widget_rect = pygame.Rect(878,726,27,21)
-        self.quit_rect = pygame.Rect(747,887,99,26)
+        self.widget_rect = pygame.Rect(x+188,726,27,21)
+        self.quit_rect = pygame.Rect(x+57,887,99,26)
+        self.first_open = False
         self.open = False
+        self.arrow = arrow
+        
       
     def update(self,pos,other):
         newx, newy = pos
@@ -174,6 +180,9 @@ class MenuWidget(Bar):
             self.rect.y = 429
             self.widget_rect.y = 431
             self.open = True
+            if not self.first_open:
+                self.arrow.kill()
+                self.first_open = True
         else:
             self.rect.y = 723
             self.widget_rect.y = 726
@@ -183,25 +192,30 @@ class MenuWidget(Bar):
 class Lives(Bar):
     def __init__(self,x,y,friends,place,image=str('3lives.png')):
         Bar.__init__(self,x,y,friends,place,image)
-        self.next_life = 2
-        self.three_lives = self.image
-        self.two_lives = system.load_graphics('2lives.png')
-        self.one_life = system.load_graphics('1life.png')
+        self.next_life = 4
+        self.five_lives = self.image
+        self.life_image = [(str('1life.png')),(str('2lives.png')),
+                           (str('3lives.png')),(str('4lives.png')),
+                           (str('5lives.png'))]
         
     def update(self):
-        if self.next_life == 2:
-            self.image = self.two_lives
-        elif self.next_life == 1:
-            self.image = self.one_life
+        self.image = system.load_graphics(self.life_image[self.next_life-1])
         self.next_life -= 1
 
     def reset(self):
-        print "should work!"
-        self.next_life = 2
-        self.image = self.three_lives
+        self.next_life = 4
+        self.image = system.load_graphics(self.life_image[self.next_life])
 
     def back_to_three(self,re_group):
-        self.next_life = 2
-        self.image = system.load_graphics('3lives.png')
+        self.next_life = 4
+        self.image = system.load_graphics(self.life_image[self.next_life])
         if re_group:
             self.add(self.group)
+
+    def no_lives(self):
+        self.kill()
+
+class Arrow(Bar):
+    def __init__(self,x,y,friends,place,image=str('arrow.png')):
+        Bar.__init__(self,x,y,friends,place,image)
+        

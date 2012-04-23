@@ -22,7 +22,7 @@ class Player(Sprite):
         self.maxY = maxY
         self.group = group
         self.add(group)
-        self.lives = 3
+        self.lives = 5
         self.tailGroup = tail
         self.tailColorCounter = 0
         self.tailColors = [(0,0,255),(0,114,54),(255,255,0),(237,28,36),(199,178,153),(158,0,93)]
@@ -148,7 +148,7 @@ class Player(Sprite):
         self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
         self.makeANew = False
         self.addTail = True  
-        self.lives = 3
+        self.lives = 5
         self.resetAccel()
         self.vx,self.vy = self.start_vec
         self.vxi,self.vyi = self.start_vec
