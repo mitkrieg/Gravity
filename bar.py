@@ -75,11 +75,13 @@ class ToolBar(Bar):
             self.items_one_placed += 1
             if self.items_one_placed >= self.items_one_limit:
                 self.items_one.x = -30
+                self.itemsTab.rock_item.dark()
 
     def items_reset(self,one=1):
         self.items_one_placed = 0
         self.items_one_limit = one
         self.items_one = pygame.Rect(119,667,55,45)
+        self.itemsTab.rock_item.light()
         
     def change_goal(self,image):
         self.barGoal.change_image(image)
@@ -113,35 +115,42 @@ class ItemsTab(Bar):
         self.xOpenOffset = x_open_offset
         self.xClosedOffset = x_closed_offset
         self.clickOffset = click_offset
+        self.rock_item = Item(x+106,652,friends,place)
 
     def update(self,pos,other):
         newx, newy = pos
         if self.rect.x < 2 and self.rect.x >= -912 and not self.open:
             self.rect.x = newx-917
             self.items_rect.x = newx-self.clickOffset
+            self.rock_item.rect.x = self.rect.x+106
         elif self.rect.x < 2 and self.rect.x >= -912 and self.open:
             self.rect.x = newx-954
             self.items_rect.x = newx-self.clickOffset
+            self.rock_item.rect.x = self.rect.x+106
         elif self.rect.x > -400:
             self.rect.x = 1
             self.items_rect.x = 914
             self.open = True
             other.grabbed = None
+            self.rock_item.rect.x = self.rect.x+106
         elif self.rect.x < -400:
             self.rect.x = -912
             self.items_rect.x = 7
             self.open = False
             other.grabbed = None
+            self.rock_item.rect.x = self.rect.x+106
         
     def dropped(self):
         if self.open == False:
             self.rect.x = 1
             self.items_rect.x = 914
             self.open = True
+            self.rock_item.rect.x = self.rect.x+106
         else:
             self.rect.x = -912
             self.items_rect.x = 1
             self.open = False
+            self.rock_item.rect.x = self.rect.x+106
 
 class MenuWidget(Bar):
     def __init__(self,x,y,friends,place,arrow,image=str('widget.png')):
@@ -219,3 +228,14 @@ class Arrow(Bar):
     def __init__(self,x,y,friends,place,image=str('arrow.png')):
         Bar.__init__(self,x,y,friends,place,image)
         
+
+class Item(Bar):
+    def __init__(self,x,y,friends,place,image=str('rock_item.png')):
+        Bar.__init__(self,x,y,friends,place,image)
+        self.img_txt = [(str('rock_item.png')),(str('rock_item_dark.png'))]
+
+    def dark(self):
+        self.image = system.load_graphics(self.img_txt[1])
+
+    def light(self):
+        self.image = system.load_graphics(self.img_txt[0])

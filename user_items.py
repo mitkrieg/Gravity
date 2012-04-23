@@ -64,6 +64,7 @@ class UserPlanet(Sprite):
             self.bar.items_one_placed -= 1
             self.bar.items_one.x = 119
             self.kill()
+            self.bar.items_reset()
         elif pygame.sprite.collide_mask(self,self.player):
             x,y = self.og_place
             self.rect.x = x

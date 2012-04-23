@@ -100,6 +100,9 @@ class Player(Sprite):
                 self.addAccel(planet)
             if self.addTail:
                 self.tail.newSpace(self.rect.x,self.rect.y,self.ax,self.ay)
+            slope = (self.vy-self.ay)/(self.vx-self.ax)
+            self.angle = ((math.atan(slope)*(180/math.pi))+45)
+            print self.angle
             self.rect.x += self.vx
             self.rect.y += self.vy
             self.vx += self.ax
