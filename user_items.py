@@ -7,7 +7,7 @@ import system
 
 class UserPlanet(Sprite):
     image = None
-    def __init__(self,x,y,w,h,start_mass,group,temp,obstacles_grp,bar,image):
+    def __init__(self,x,y,w,h,start_mass,group,temp,obstacles_grp,bar,player,image):
         Sprite.__init__(self)
         if self.image == None:
             self.image = system.load_graphics(image)
@@ -24,6 +24,8 @@ class UserPlanet(Sprite):
         self.add(temp)
         self.bar = bar
         self.ob_grp = obstacles_grp
+        self.og_place = ((x,y))
+        self.player = player
                 
     def update(self,pos,other=None):
         xchange,ychange = pos
@@ -35,18 +37,22 @@ class UserPlanet(Sprite):
             self.rect.y = newY
         if self.rect.y+self.rect.h < 620 and self.reGroup == False:
             self.reGroup = True
-        
+    '''       
     def collision_test(self,pos):
         print 'testin'
-
+    '''
     def dropped(self):
         self.grabbed = False
         self.kill()
-        self.add(self.group)
-        self.add(self.ob_grp)
+        if not pygame.sprite.collide_mask(self,self.player):
+            self.add(self.group)
+            self.add(self.ob_grp)
+        else:
+            self.bar.items_reset()
     
     def grab(self,pos):
         x,y = pos
+        self.og_place = pos
         xoffset = x-self.rect.x
         yoffset = y-self.rect.y
         self.mouse_offset = ((xoffset,yoffset))
@@ -58,6 +64,10 @@ class UserPlanet(Sprite):
             self.bar.items_one_placed -= 1
             self.bar.items_one.x = 119
             self.kill()
+        elif pygame.sprite.collide_mask(self,self.player):
+            x,y = self.og_place
+            self.rect.x = x
+            self.rect.y = y
 
     def draw(self,surf):
         surf.blit(self.image,(self.rect.x,self.rect.y))

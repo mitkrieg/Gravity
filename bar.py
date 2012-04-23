@@ -71,7 +71,7 @@ class ToolBar(Bar):
             x,y = pos
             x -= 30
             y -= 30
-            self.grabbed = UserPlanet(x,y,60,60,25,self.game.userPlacedObjects,self.group,self.game.obstacles,self,str('rockplanet.png'))
+            self.grabbed = UserPlanet(x,y,60,60,25,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,str('rockplanet.png'))
             self.items_one_placed += 1
             if self.items_one_placed >= self.items_one_limit:
                 self.items_one.x = -30

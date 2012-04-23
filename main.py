@@ -110,7 +110,7 @@ class Game(object):
                     self.player.refresh(4)
                 '''
                 if evt.key == K_z:
-                    print len(self.userPlacedObjects)
+                    print self.bar.items_one_placed
                 
             elif evt.type == KEYUP:
                 if evt.key == K_ESCAPE:
@@ -160,8 +160,9 @@ class Game(object):
         elif pygame.sprite.spritecollideany(self.player,self.blackHoles) != None:
             self.player.blackHoleCollision(True,False)
 
-        elif pygame.sprite.spritecollideany(self.player,self.userPlacedObjects) != None:
-            self.player.update(True)
+        for obj in self.userPlacedObjects:
+            if pygame.sprite.collide_mask(self.player,obj) and not obj.grabbed:
+                self.player.update(True)
         pygame.display.flip()
 
 
@@ -263,22 +264,24 @@ level = int(level)
 
 Game(level).run()
 
-'''Pylygon Methods'''
+'''////////////Pylygon Methods
 #http://www.pygame.org/project-pylygon-1718-.html
 
-'''TODO'''
+////////////TODO
 #INSTRUCTIONS OPTION IN MENU WIDGET
-#####WARNING FOR ITEM LIMIT###
-#####RIGHT CLICK FOR EDITING OBJECT
-#OTHER OBSTACLES (enemy ships, asteroids, comets)
-#SAVING
-#LOADING
-#LEVELS
+#WARNING FOR ITEM LIMIT###
+#RIGHT CLICK FOR EDITING OBJECT
+OTHER OBSTACLES (enemy ships, asteroids, comets)
+SAVING
+LOADING
+LEVELS
 
-'''BUGS'''
-#USER PLACING OBJECT ON TOP OF PLAYER, FREAKS OUT!
+////////////BUGS
+##SQUASHED BUGS
+USER PLACING OBJECT ON TOP OF PLAYER, FREAKS OUT!
 
-'''DONE(ish)'''
-#PLAYER TRAIL
-#PLAYER OBJECT
-#GOAL
+////////////DONE(ish)
+PLAYER TRAIL
+PLAYER OBJECT
+GOAL
+'''
