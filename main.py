@@ -45,6 +45,8 @@ class Game(object):
         BlackHole(339,70,self.blackHoles,self.screen,80,71,16)
         self.obstacles.add(self.blackHoles)
         self.obstacles.add(self.goalCollide)
+        self.freeb = False
+        self.gotoLevel = level
       
     def quit(self):
         self.done = True
@@ -116,11 +118,14 @@ class Game(object):
                 if evt.key == K_ESCAPE:
                     self.bar.clear_grabbed()
             elif evt.type == MOUSEBUTTONDOWN:
-                #print pos
-                self.bar.collision_test(pos,self.player)
+                print pos
+                should_freebie = self.bar.collision_test(pos,self.player,evt.button)
+                if should_freebie and not self.freeb:
+                    self.freebie()
+                    self.freeb = True
                 if evt.button == 1:
                     for obj in self.userPlacedObjects:
-                        if obj.rect.collidepoint(pos):
+                        if obj.rect.collidepoint(pos) and not self.player.makeANew:
                             obj.grab(pos)
                 elif evt.button == 3:
                     print 'info'
@@ -186,13 +191,17 @@ class Game(object):
                 if self.level == 2:
                     self.bar.reset_lives()
                     self.bar.score.update(2000)
-                    self.goal.change_loc(600,60)
+                    self.goal.change_loc(638,135)
                     self.goal.change_image(str('venus.png'))
                     self.bar.change_goal(str('venus.png'))
                     self.userPlacedObjects.empty()
-                    self.bar.items_reset(2)
+                    self.freeb = False
+                    self.bar.items_reset(1)
                     for hole in self.blackHoles:
-                        hole.move(792,458)
+                        hole.move(842,388)
+                    hole = BlackHole(388,189,self.blackHoles,self.screen,80,71,16)
+                    hole.flip()
+
                 self.player.restart()
                 changed = True
                 
@@ -213,6 +222,43 @@ class Game(object):
 
             pygame.display.flip()
         self.transition.reset(-1314)
+
+    
+    def freebie(self):
+        self.player.makeANew = True
+        self.player.addTail = False
+        while True:
+            self.clock.tick(self.fps)
+            pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
+            
+            for evt in pygame.event.get():
+                if evt.type == QUIT:
+                    self.quit()
+                if evt.type == KEYDOWN:
+                    if evt.key == K_ESCAPE:
+                        self.quit()
+            
+                        
+            if pygame.sprite.spritecollideany(self.player,self.blackHoles) != None:
+                self.player.blackHoleCollision(True,False)
+
+            self.startItems.update()
+            self.stars.draw()
+            self.goalCollide.draw(self.screen)
+            self.userPlacedObjects.draw(self.screen)
+            self.toolbar.draw(self.screen)
+            self.player.drawTails()
+            self.blackHoles.draw(self.screen)
+            self.playerGroup.update()
+            self.playerGroup.draw(self.screen)  
+            self.startItems.draw(self.screen)
+            if len(self.playerGroup) < 1:
+                self.player.addTail = True
+                pygame.time.wait(750)
+                self.player.add(self.playerGroup)
+                break
+            pygame.display.flip()
+            
 
     def gameOver(self):
         overing = True
@@ -246,6 +292,10 @@ class Game(object):
     def run(self,level=0):
         self.done = False
         self.clock = pygame.time.Clock()
+        if self.gotoLevel > 1 and self.gotoLevel < 3:
+            self.tick()
+            self.level = self.gotoLevel
+            self.next_level()
         while not self.done:
             while self.level == 0 and not self.done:
                 self.level_0()
@@ -258,7 +308,7 @@ class Game(object):
 if len(sys.argv) > 1:
     level = sys.argv[1]
 else:
-    level = 0
+    level = 1
 
 level = int(level)
 

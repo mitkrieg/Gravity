@@ -27,5 +27,8 @@ class BlackHole(Sprite):
         self.rect.x = newx
         self.rect.y = newy
 
+    def flip(self):
+        self.image = pygame.transform.flip(self.image,True,False)
+    
     def update(self):
         pass

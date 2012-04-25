@@ -42,6 +42,7 @@ class Player(Sprite):
         self.ax = 0
         self.ay = 0
         self.game = game
+        self.old_angle = 0
             
     def resetAccel(self):
         self.ax=0
@@ -100,9 +101,17 @@ class Player(Sprite):
                 self.addAccel(planet)
             if self.addTail:
                 self.tail.newSpace(self.rect.x,self.rect.y,self.ax,self.ay)
+            '''
             slope = (self.vy-self.ay)/(self.vx-self.ax)
             self.angle = ((math.atan(slope)*(180/math.pi))+45)
-            print self.angle
+            rot = int(self.angle-self.old_angle)
+            print rot
+            if (self.angle > self.old_angle):
+                self.image = pygame.transform.rotate(self.image,1)
+            elif (self.angle < self.old_angle):
+                self.image = pygame.transform.rotate(self.image,1)
+            self.old_angle = self.angle
+            '''
             self.rect.x += self.vx
             self.rect.y += self.vy
             self.vx += self.ax

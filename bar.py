@@ -58,9 +58,11 @@ class ToolBar(Bar):
             self.grabbed.dropped()
             self.grabbed = None
 
-    def collision_test(self,pos,player):
-        if self.goRect.collidepoint(pos) and not self.itemsTab.open and not self.menuWidget.open:
+    def collision_test(self,pos,player,button):
+        if self.goRect.collidepoint(pos) and not self.itemsTab.open and not self.menuWidget.open and button == 1:
             player.makeANew = True
+        elif self.goRect.collidepoint(pos) and not self.itemsTab.open and not self.menuWidget.open and button == 3:
+            return True
         elif self.itemsTab.items_rect.collidepoint(pos) and not self.menuWidget.open:
             self.grabbed = self.itemsTab
         elif self.menuWidget.widget_rect.collidepoint(pos) and not self.itemsTab.open:
@@ -76,6 +78,8 @@ class ToolBar(Bar):
             if self.items_one_placed >= self.items_one_limit:
                 self.items_one.x = -30
                 self.itemsTab.rock_item.dark()
+
+        return False
 
     def items_reset(self,one=1):
         self.items_one_placed = 0
