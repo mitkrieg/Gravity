@@ -99,21 +99,8 @@ class Game(object):
                 if evt.key == K_ESCAPE:
                     self.quit()
                 #    self.bar.grabbed = self.bar.menuWidget
-                '''
-                elif evt.key == K_q:
-                    self.player.refresh(0)
-                elif evt.key == K_w:
-                    self.player.refresh(1)
-                elif evt.key == K_e:
-                    self.player.refresh(2)
-                elif evt.key == K_r:
-                    self.player.refresh(3)
-                elif evt.key == K_t:
-                    self.player.refresh(4)
-                '''
                 if evt.key == K_z:
-                    print self.bar.items_one_placed
-                
+                    print self.bar.items_one_placed   
             elif evt.type == KEYUP:
                 if evt.key == K_ESCAPE:
                     self.bar.clear_grabbed()
@@ -125,7 +112,7 @@ class Game(object):
                     self.freeb = True
                 if evt.button == 1:
                     for obj in self.userPlacedObjects:
-                        if obj.rect.collidepoint(pos) and not self.player.makeANew:
+                        if obj.rect.collidepoint(pos) and not self.player.makeANew and not self.bar.menuWidget.open:
                             obj.grab(pos)
                 elif evt.button == 3:
                     print 'info'
@@ -133,7 +120,7 @@ class Game(object):
             elif evt.type == MOUSEBUTTONUP:
                 self.bar.clear_grabbed()
                 for obj in self.userPlacedObjects:
-                    obj.drop()
+                    obj.drop(self.goal,self.blackHoles)
              
 
      
@@ -189,14 +176,11 @@ class Game(object):
                         
             if self.transition.rect.x >= -50 and not changed:
                 if self.level == 2:
-                    self.bar.reset_lives()
-                    self.bar.score.update(2000)
-                    self.goal.change_loc(638,135)
-                    self.goal.change_image(str('venus.png'))
-                    self.bar.change_goal(str('venus.png'))
+                    self.goal.next_level()
+                    self.bar.next_level()
                     self.userPlacedObjects.empty()
                     self.freeb = False
-                    self.bar.items_reset(1)
+                    self.bar.itemsTab.earth_item.light()
                     for hole in self.blackHoles:
                         hole.move(842,388)
                     hole = BlackHole(388,189,self.blackHoles,self.screen,80,71,16)

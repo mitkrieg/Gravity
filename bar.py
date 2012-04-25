@@ -19,6 +19,8 @@ class Bar(Sprite):
         self.add(friends)
         self.group = friends
         self.screen = place
+        self.nextPosition = 0
+        self.images = [(str('venus.png'))]
 
 class ToolBar(Bar):
     def __init__(self,x,y,friends,place,other,image=str('taskbar.png')):
@@ -36,6 +38,8 @@ class ToolBar(Bar):
         self.items_reset()
         self.items_one_limit = 1
         self.items_one_placed = 0
+        self.items_two_limit = 1
+        self.items_two_placed = 0
                 
     def lives_over(self):
         self.lives.no_lives()
@@ -78,18 +82,25 @@ class ToolBar(Bar):
             if self.items_one_placed >= self.items_one_limit:
                 self.items_one.x = -30
                 self.itemsTab.rock_item.dark()
-
+        elif self.itemsTab.earth_item.rect.collidepoint(pos) and self.itemsTab.open:
+            x = 1+1
         return False
 
-    def items_reset(self,one=1):
+    def items_reset(self,one=0,two=0):
         self.items_one_placed = 0
         self.items_one_limit = one
+        self.items_two_placed = 0
+        self.items_two_limit = two
         self.items_one = pygame.Rect(119,667,55,45)
+        #self.itemsTab.earth_item.light()
         self.itemsTab.rock_item.light()
         
-    def change_goal(self,image):
-        self.barGoal.change_image(image)
+    def next_level(self):
+        self.barGoal.change_image(self.images[self.nextPosition])
         self.barGoal.resize(40,40)
+        self.items_reset(1)
+        self.reset_lives()
+        self.score.update(2000)
         
     
 class Score(Sprite):
@@ -119,7 +130,9 @@ class ItemsTab(Bar):
         self.xOpenOffset = x_open_offset
         self.xClosedOffset = x_closed_offset
         self.clickOffset = click_offset
-        self.rock_item = Item(x+106,652,friends,place)
+        self.rock_item = RockItem(x+106,652,friends,place)
+        self.earth_item = EarthItem(x+434,652,friends,place)
+        self.venus_item = VenusItem(x+720,652,friends,place)
 
     def update(self,pos,other):
         newx, newy = pos
@@ -127,22 +140,30 @@ class ItemsTab(Bar):
             self.rect.x = newx-917
             self.items_rect.x = newx-self.clickOffset
             self.rock_item.rect.x = self.rect.x+106
+            self.earth_item.rect.x = self.rect.x+422
+            self.venus_item.rect.x = self.rect.x+720
         elif self.rect.x < 2 and self.rect.x >= -912 and self.open:
             self.rect.x = newx-954
             self.items_rect.x = newx-self.clickOffset
             self.rock_item.rect.x = self.rect.x+106
+            self.earth_item.rect.x = self.rect.x+422
+            self.venus_item.rect.x = self.rect.x+720
         elif self.rect.x > -400:
             self.rect.x = 1
             self.items_rect.x = 914
             self.open = True
             other.grabbed = None
             self.rock_item.rect.x = self.rect.x+106
+            self.earth_item.rect.x = self.rect.x+422
+            self.venus_item.rect.x = self.rect.x+720
         elif self.rect.x < -400:
             self.rect.x = -912
             self.items_rect.x = 7
             self.open = False
             other.grabbed = None
             self.rock_item.rect.x = self.rect.x+106
+            self.earth_item.rect.x = self.rect.x+422
+            self.venus_item.rect.x = self.rect.x+720
         
     def dropped(self):
         if self.open == False:
@@ -150,11 +171,15 @@ class ItemsTab(Bar):
             self.items_rect.x = 914
             self.open = True
             self.rock_item.rect.x = self.rect.x+106
+            self.earth_item.rect.x = self.rect.x+422
+            self.venus_item.rect.x = self.rect.x+720
         else:
             self.rect.x = -912
             self.items_rect.x = 1
             self.open = False
             self.rock_item.rect.x = self.rect.x+106
+            self.earth_item.rect.x = self.rect.x+422
+            self.venus_item.rect.x = self.rect.x+720
 
 class MenuWidget(Bar):
     def __init__(self,x,y,friends,place,arrow,image=str('widget.png')):
@@ -234,12 +259,34 @@ class Arrow(Bar):
         
 
 class Item(Bar):
-    def __init__(self,x,y,friends,place,image=str('rock_item.png')):
-        Bar.__init__(self,x,y,friends,place,image)
-        self.img_txt = [(str('rock_item.png')),(str('rock_item_dark.png'))]
+    def __init__(self,x,y,friends,place,image=str('locked_item.png')):
+        Bar.__init__(self,x,y,friends,place,image)   
+        locked = True
 
     def dark(self):
+        locked = True
         self.image = system.load_graphics(self.img_txt[1])
 
     def light(self):
+        locked = False
         self.image = system.load_graphics(self.img_txt[0])
+
+
+
+class RockItem(Item):
+    def __init__(self,x,y,friends,place,image=str('rock_item.png')):
+        Item.__init__(self,x,y,friends,place,image)
+        locked = False
+        self.img_txt = [(str('rock_item.png')),(str('rock_item_dark.png'))]
+
+
+class EarthItem(Item):
+    def __init__(self,x,y,friends,place,image=str('locked_item.png')):
+        Item.__init__(self,x,y,friends,place,image)
+        self.img_txt = [str('earth_item.png'),str('earth_item_dark.png')]
+
+
+class VenusItem(Item):
+    def __init__(self,x,y,friends,place,image=str('locked_item.png')):
+        Item.__init__(self,x,y,friends,place,image)
+        self.img_txt = [(str('venus_item.png')),(str('venus_item_dark.png'))]

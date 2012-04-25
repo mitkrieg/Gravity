@@ -58,14 +58,14 @@ class UserPlanet(Sprite):
         self.mouse_offset = ((xoffset,yoffset))
         self.grabbed = True
 
-    def drop(self):
+    def drop(self,goal,blackHoles):
         self.grabbed = False
         if self.rect.y > 628 and self.reGroup == True:
             self.bar.items_one_placed -= 1
             self.bar.items_one.x = 119
             self.kill()
             self.bar.items_reset()
-        elif pygame.sprite.collide_mask(self,self.player):
+        elif pygame.sprite.collide_mask(self,self.player) or pygame.sprite.spritecollideany(self,blackHoles) or pygame.sprite.collide_mask(self,goal):
             x,y = self.og_place
             self.rect.x = x
             self.rect.y = y
