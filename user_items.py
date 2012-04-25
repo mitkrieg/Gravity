@@ -7,7 +7,7 @@ import system
 
 class UserPlanet(Sprite):
     image = None
-    def __init__(self,x,y,w,h,start_mass,group,temp,obstacles_grp,bar,player,image):
+    def __init__(self,x,y,w,h,start_mass,group,temp,obstacles_grp,bar,player,kind,image):
         Sprite.__init__(self)
         if self.image == None:
             self.image = system.load_graphics(image)
@@ -26,6 +26,7 @@ class UserPlanet(Sprite):
         self.ob_grp = obstacles_grp
         self.og_place = ((x,y))
         self.player = player
+        self.kind = kind
                 
     def update(self,pos,other=None):
         xchange,ychange = pos
@@ -48,7 +49,8 @@ class UserPlanet(Sprite):
             self.add(self.group)
             self.add(self.ob_grp)
         else:
-            self.bar.items_reset()
+            if self.kind == 1:
+                self.bar.item_one_reset(1)
     
     def grab(self,pos):
         x,y = pos
@@ -64,7 +66,8 @@ class UserPlanet(Sprite):
             self.bar.items_one_placed -= 1
             self.bar.items_one.x = 119
             self.kill()
-            self.bar.items_reset()
+            if self.kind == 1:
+                self.bar.item_one_reset(1)
         elif pygame.sprite.collide_mask(self,self.player) or pygame.sprite.spritecollideany(self,blackHoles) or pygame.sprite.collide_mask(self,goal):
             x,y = self.og_place
             self.rect.x = x

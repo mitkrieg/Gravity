@@ -35,7 +35,7 @@ class ToolBar(Bar):
         self.itemsTab = ItemsTab(self.rect.x-912,self.rect.y+15,self.group,self.screen,-917,-954,-3)
         self.game = other
         self.grabbed = None
-        self.items_reset()
+        self.item_one_reset(1)
         self.items_one_limit = 1
         self.items_one_placed = 0
         self.items_two_limit = 1
@@ -77,7 +77,7 @@ class ToolBar(Bar):
             x,y = pos
             x -= 30
             y -= 30
-            self.grabbed = UserPlanet(x,y,60,60,25,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,str('rockplanet.png'))
+            self.grabbed = UserPlanet(x,y,60,60,25,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,1,str('rockplanet.png'))
             self.items_one_placed += 1
             if self.items_one_placed >= self.items_one_limit:
                 self.items_one.x = -30
@@ -86,7 +86,7 @@ class ToolBar(Bar):
             x = 1+1
         return False
 
-    def items_reset(self,one=0,two=0):
+    def item_one_reset(self,one=0,two=0):
         self.items_one_placed = 0
         self.items_one_limit = one
         self.items_two_placed = 0
@@ -98,7 +98,7 @@ class ToolBar(Bar):
     def next_level(self):
         self.barGoal.change_image(self.images[self.nextPosition])
         self.barGoal.resize(40,40)
-        self.items_reset(1)
+        self.item_one_reset(1)
         self.reset_lives()
         self.score.update(2000)
         
