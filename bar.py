@@ -35,10 +35,10 @@ class ToolBar(Bar):
         self.itemsTab = ItemsTab(self.rect.x-912,self.rect.y+15,self.group,self.screen,-917,-954,-3)
         self.game = other
         self.grabbed = None
-        self.item_one_reset(1)
+        self.item_one_reset()
         self.items_one_limit = 1
         self.items_one_placed = 0
-        self.items_two_limit = 1
+        self.items_two_limit = 0
         self.items_two_placed = 0
                 
     def lives_over(self):
@@ -82,25 +82,35 @@ class ToolBar(Bar):
             if self.items_one_placed >= self.items_one_limit:
                 self.items_one.x = -30
                 self.itemsTab.rock_item.dark()
-        elif self.itemsTab.earth_item.rect.collidepoint(pos) and self.itemsTab.open:
-            x = 1+1
+        elif self.itemsTab.earth_item.rect.collidepoint(pos) and self.itemsTab.open and self.itemsTab.earth_item and self.items_two_placed < self.items_two_limit:
+            x,y = pos
+            x -= 30
+            y -= 30
+            self.grabbed = UserPlanet(x,y,65,65,30,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,2,str('earth.png'))
+            self.items_two_placed += 1
+            print self.items_two_placed
+            if self.items_two_placed >= self.items_two_limit:
+                self.itemsTab.earth_item.dark()
         return False
 
-    def item_one_reset(self,one=0,two=0):
+    def item_one_reset(self):
         self.items_one_placed = 0
-        self.items_one_limit = one
-        self.items_two_placed = 0
-        self.items_two_limit = two
         self.items_one = pygame.Rect(119,667,55,45)
-        #self.itemsTab.earth_item.light()
         self.itemsTab.rock_item.light()
+
+    def item_two_reset(self):
+        self.items_two_placed = 0
+        self.itemsTab.earth_item.light()
         
-    def next_level(self):
+    def next_level(self,level):
         self.barGoal.change_image(self.images[self.nextPosition])
         self.barGoal.resize(40,40)
-        self.item_one_reset(1)
+        self.item_one_reset()
         self.reset_lives()
         self.score.update(2000)
+        if level == 2:
+            self.item_two_reset()
+            self.items_two_limit = 1
         
     
 class Score(Sprite):

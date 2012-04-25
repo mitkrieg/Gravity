@@ -38,19 +38,18 @@ class UserPlanet(Sprite):
             self.rect.y = newY
         if self.rect.y+self.rect.h < 620 and self.reGroup == False:
             self.reGroup = True
-    '''       
-    def collision_test(self,pos):
-        print 'testin'
-    '''
+ 
     def dropped(self):
         self.grabbed = False
         self.kill()
-        if not pygame.sprite.collide_mask(self,self.player):
+        if not pygame.sprite.collide_mask(self,self.player) and self.rect.y < 619:
             self.add(self.group)
             self.add(self.ob_grp)
         else:
             if self.kind == 1:
-                self.bar.item_one_reset(1)
+                self.bar.item_one_reset()
+            elif self.kind == 2:
+                self.bar.item_two_reset()
     
     def grab(self,pos):
         x,y = pos
@@ -62,12 +61,14 @@ class UserPlanet(Sprite):
 
     def drop(self,goal,blackHoles):
         self.grabbed = False
-        if self.rect.y > 628 and self.reGroup == True:
+        if self.rect.y > 619 and self.reGroup == True:
             self.bar.items_one_placed -= 1
             self.bar.items_one.x = 119
             self.kill()
             if self.kind == 1:
-                self.bar.item_one_reset(1)
+                self.bar.item_one_reset()
+            elif self.kind == 2:
+                self.bar.item_two_reset()
         elif pygame.sprite.collide_mask(self,self.player) or pygame.sprite.spritecollideany(self,blackHoles) or pygame.sprite.collide_mask(self,goal):
             x,y = self.og_place
             self.rect.x = x

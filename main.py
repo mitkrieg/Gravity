@@ -177,7 +177,7 @@ class Game(object):
             if self.transition.rect.x >= -50 and not changed:
                 if self.level == 2:
                     self.goal.next_level()
-                    self.bar.next_level()
+                    self.bar.next_level(self.level)
                     self.userPlacedObjects.empty()
                     self.freeb = False
                     self.bar.itemsTab.earth_item.light()
