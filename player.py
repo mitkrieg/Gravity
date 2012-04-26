@@ -92,6 +92,22 @@ class Player(Sprite):
             self.vx,self.vy = self.start_vec
             self.vxi,self.vyi = self.start_vec
             self.alive = True
+
+        if not self.alive:
+            if self.tailColorCounter == 5:
+                self.tailColorCounter = 0
+            else:
+                self.tailColorCounter += 1
+            pygame.time.delay(1000)
+            self.rect.x, self.rect.y = self.reset
+            self.makeANew = False
+            self.lives -= 1
+            self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
+            self.remove(self.group)
+            self.resetAccel()
+            self.vx,self.vy = self.start_vec
+            self.vxi,self.vyi = self.start_vec
+            self.alive = True
            
             
         elif self.makeANew:
