@@ -7,7 +7,7 @@ import system
 
 class UserPlanet(Sprite):
     image = None
-    def __init__(self,x,y,w,h,start_mass,group,temp,obstacles_grp,bar,player,kind,image):
+    def __init__(self,x,y,w,h,start_mass,group,temp,obstacles_grp,bar,player,kind,goal,image):
         Sprite.__init__(self)
         if self.image == None:
             self.image = system.load_graphics(image)
@@ -27,6 +27,7 @@ class UserPlanet(Sprite):
         self.og_place = ((x,y))
         self.player = player
         self.kind = kind
+        self.goal = goal
                 
     def update(self,pos,other=None):
         xchange,ychange = pos
@@ -42,7 +43,7 @@ class UserPlanet(Sprite):
     def dropped(self):
         self.grabbed = False
         self.kill()
-        if not pygame.sprite.collide_mask(self,self.player) and self.rect.y < 619:
+        if not pygame.sprite.collide_mask(self,self.player) and self.rect.y < 619 and not pygame.sprite.collide_mask(self,self.goal):
             self.add(self.group)
             self.add(self.ob_grp)
         else:
@@ -53,13 +54,13 @@ class UserPlanet(Sprite):
     
     def grab(self,pos):
         x,y = pos
-        self.og_place = pos
+        self.og_place = (self.rect.x,self.rect.y)
         xoffset = x-self.rect.x
         yoffset = y-self.rect.y
         self.mouse_offset = ((xoffset,yoffset))
         self.grabbed = True
 
-    def drop(self,goal,blackHoles):
+    def drop(self,blackHoles):
         self.grabbed = False
         if self.rect.y > 619 and self.reGroup == True:
             self.bar.items_one_placed -= 1
@@ -69,10 +70,18 @@ class UserPlanet(Sprite):
                 self.bar.item_one_reset()
             elif self.kind == 2:
                 self.bar.item_two_reset()
-        elif pygame.sprite.collide_mask(self,self.player) or pygame.sprite.spritecollideany(self,blackHoles) or pygame.sprite.collide_mask(self,goal):
+        elif pygame.sprite.collide_mask(self,self.player) or pygame.sprite.spritecollideany(self,blackHoles) or pygame.sprite.collide_mask(self,self.goal):
             x,y = self.og_place
             self.rect.x = x
             self.rect.y = y
 
     def draw(self,surf):
         surf.blit(self.image,(self.rect.x,self.rect.y))
+
+
+    def remove(self):
+        self.kill()
+        if self.kind == 1:
+            self.bar.item_one_reset()
+        elif self.kind == 2:
+            self.bar.item_two_reset()

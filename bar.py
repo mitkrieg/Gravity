@@ -21,9 +21,10 @@ class Bar(Sprite):
         self.screen = place
         self.nextPosition = 0
         self.images = [(str('venus.png'))]
+        
 
 class ToolBar(Bar):
-    def __init__(self,x,y,friends,place,other,image=str('taskbar.png')):
+    def __init__(self,x,y,friends,place,other,goal,image=str('taskbar.png')):
         Bar.__init__(self,x,y,friends,place,image)
         self.lives = Lives(self.rect.x+353,self.rect.y+71,self.group,self.screen,str('5lives.png'))
         self.goRect = pygame.Rect(717,658,118,75)
@@ -40,6 +41,7 @@ class ToolBar(Bar):
         self.items_one_placed = 0
         self.items_two_limit = 0
         self.items_two_placed = 0
+        self.goal = goal
                 
     def lives_over(self):
         self.lives.no_lives()
@@ -77,7 +79,7 @@ class ToolBar(Bar):
             x,y = pos
             x -= 30
             y -= 30
-            self.grabbed = UserPlanet(x,y,60,60,25,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,1,str('rockplanet.png'))
+            self.grabbed = UserPlanet(x,y,60,60,25,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,1,self.goal,str('rockplanet.png'))
             self.items_one_placed += 1
             if self.items_one_placed >= self.items_one_limit:
                 self.items_one.x = -30
@@ -86,7 +88,7 @@ class ToolBar(Bar):
             x,y = pos
             x -= 30
             y -= 30
-            self.grabbed = UserPlanet(x,y,65,65,30,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,2,str('earth.png'))
+            self.grabbed = UserPlanet(x,y,65,65,30,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,2,self.goal,str('earth.png'))
             self.items_two_placed += 1
             print self.items_two_placed
             if self.items_two_placed >= self.items_two_limit:

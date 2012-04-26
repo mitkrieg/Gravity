@@ -58,7 +58,7 @@ class Player(Sprite):
         self.ax += force*dx/dist
         self.ay += force*dy/dist
 
-    def update(self,boo=False):
+    def update(self,boo=False,accel_group = None):
         self.dead(boo)
         if self.shrink and self.shrinkw > 5:
             if self.shrinkTime:
@@ -77,8 +77,7 @@ class Player(Sprite):
             self.image = self.backup
             self.shrinkReset()
             self.blackHoleCollision(False,True,True)
-            
-        if not self.alive:
+
             if self.tailColorCounter == 5:
                 self.tailColorCounter = 0
             else:
@@ -96,8 +95,13 @@ class Player(Sprite):
            
             
         elif self.makeANew:
+            if accel_group == None:
+                grouposo = self.game.obstacles
+            else:
+                grouposo = accel_group
+            
             self.resetAccel()
-            for planet in self.game.obstacles:
+            for planet in grouposo:
                 self.addAccel(planet)
             if self.addTail:
                 self.tail.newSpace(self.rect.x,self.rect.y,self.ax,self.ay)

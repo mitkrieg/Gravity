@@ -35,8 +35,8 @@ class Game(object):
         self.toolbar = OrderedUpdates()
         if level == 0:
             self.intro_screen = Intro(0,0,self.startItems)
-        self.bar = ToolBar(0,626,self.toolbar,self.screen,self)
         self.goal = Goal(573,372,self.goalCollide,30)
+        self.bar = ToolBar(0,626,self.toolbar,self.screen,self,self.goal)
         self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,624,(2,-2),self.tails,self)
         self.transition = Transition(-1314,0,self.screen,self.startItems)
         self.level = level
@@ -115,22 +115,24 @@ class Game(object):
                         if obj.rect.collidepoint(pos) and not self.player.makeANew and not self.bar.menuWidget.open:
                             obj.grab(pos)
                 elif evt.button == 3:
-                    print 'info'
+                    for obj in self.userPlacedObjects:
+                        if obj.rect.collidepoint(pos) and not self.player.makeANew and not self.bar.menuWidget.open:
+                            obj.remove()
                 #print evt.button
             elif evt.type == MOUSEBUTTONUP:
                 self.bar.clear_grabbed()
                 for obj in self.userPlacedObjects:
-                    obj.drop(self.goal,self.blackHoles)
+                    obj.drop(self.blackHoles)
              
 
      
         self.stars.draw()
         self.blackHoles.update()
         self.bar.update(pos)
+        self.blackHoles.draw(self.screen)
         self.userPlacedObjects.update(pos)
         self.userPlacedObjects.draw(self.screen)
         self.goalCollide.draw(self.screen)
-        self.blackHoles.draw(self.screen)
         self.toolbar.draw(self.screen)
         self.player.drawTails()
         self.playerGroup.update()
@@ -209,6 +211,8 @@ class Game(object):
 
     
     def freebie(self):
+        groupus = Group()
+        groupus.add(self.blackHoles,self.goal)
         self.player.makeANew = True
         self.player.addTail = False
         while True:
@@ -228,12 +232,12 @@ class Game(object):
 
             self.startItems.update()
             self.stars.draw()
+            self.player.drawTails()
             self.goalCollide.draw(self.screen)
             self.userPlacedObjects.draw(self.screen)
             self.toolbar.draw(self.screen)
-            self.player.drawTails()
             self.blackHoles.draw(self.screen)
-            self.playerGroup.update()
+            self.player.update(False,groupus)
             self.playerGroup.draw(self.screen)  
             self.startItems.draw(self.screen)
             if len(self.playerGroup) < 1:
