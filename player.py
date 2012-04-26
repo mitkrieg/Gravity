@@ -134,8 +134,10 @@ class Player(Sprite):
     def dead(self, boo):
         if self.rect.x > self.maxX-self.rect.w or self.rect.x < 0:
             self.alive = False
+            print "oob"
         elif self.rect.y > self.maxY-self.rect.h or self.rect.y < 0:
             self.alive = False
+            print "oob"
         elif not boo:
             self.alive =  True
         else:
