@@ -96,14 +96,15 @@ class Game(object):
             if evt.type == QUIT:
                 self.quit()
             elif evt.type == KEYDOWN:
-                if evt.key == K_ESCAPE:
-                    self.quit()
+                if evt.key == K_ESCAPE and not self.bar.itemsTab.open and self.bar.grabbed == None:
+                    self.bar.menuWidget.dropped()
+                    #self.quit()
                 #    self.bar.grabbed = self.bar.menuWidget
                 if evt.key == K_z:
                     print self.bar.items_one_placed   
-            elif evt.type == KEYUP:
-                if evt.key == K_ESCAPE:
-                    self.bar.clear_grabbed()
+            #elif evt.type == KEYUP:
+                #if evt.key == K_ESCAPE:
+                 #   self.bar.clear_grabbed()
             elif evt.type == MOUSEBUTTONDOWN:
                 print pos
                 should_freebie = self.bar.collision_test(pos,self.player,evt.button)
@@ -138,10 +139,11 @@ class Game(object):
         self.playerGroup.update()
         self.playerGroup.draw(self.screen)  
 
-        if len(self.playerGroup) == 0 and self.player.lives > 0:
+        if len(self.playerGroup) == 0 and self.player.lives >1:
             self.bar.lives_update()
             self.bar.score.update(-200)
             pygame.time.wait(750)
+            self.player.lives -= 1
             self.player.add(self.playerGroup)
         elif len(self.playerGroup) == 0:
             self.bar.score.update(-200)
@@ -178,7 +180,7 @@ class Game(object):
                         
             if self.transition.rect.x >= -50 and not changed:
                 if self.level == 2:
-                    self.goal.next_level()
+                    self.goal.next_level(self.level)
                     self.bar.next_level(self.level)
                     self.userPlacedObjects.empty()
                     self.freeb = False
@@ -250,7 +252,7 @@ class Game(object):
 
     def gameOver(self):
         overing = True
-        self.bar.lives_over()
+        #self.bar.lives_update()
         self.bar.update()
         self.toolbar.draw(self.screen)
         self.over_screen.draw()

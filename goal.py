@@ -17,22 +17,31 @@ class Goal(Sprite):
         self.mass = mass
         self.add(group)
         self.nextPosition = 0
-        self.positions = [(638,135)]
-        self.images = [(str('venus.png'))]
+        self.positions = [(638,135),(543,237)]
+        self.images = [(str('venus.png')),(str('saturny.png'))]
 
     def resize(self,w,h):
-        self.image = pygame.transform.scale(self.image,(w,h))
+        x = self.rect.x
+        y = self.rect.y
+        self.image = pygame.transform.smoothscale(self.image,(w,h))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
     def change_loc(self,x,y):
         self.rect.x = x
         self.rect.y = y
 
-    def next_level(self):
-        x,y = self.positions[self.nextPosition]
+    def next_level(self,level):
+        x,y = self.positions[level-2]
+        self.image = system.load_graphics(self.images[level-2])
         self.rect.x = x
         self.rect.y = y
-        self.image = system.load_graphics(self.images[self.nextPosition])
+        self.nextPosition += 1
 
     def change_image(self,new_image=str('earth.png')):
         self.image = system.load_graphics(new_image)
 
+
+    def new_mass(self,m):
+        self.mass = m

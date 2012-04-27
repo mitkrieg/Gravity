@@ -85,7 +85,7 @@ class Player(Sprite):
             pygame.time.delay(1000)
             self.rect.x, self.rect.y = self.reset
             self.makeANew = False
-            self.lives -= 1
+            #self.lives -= 1
             self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
             self.remove(self.group)
             self.resetAccel()
@@ -101,7 +101,7 @@ class Player(Sprite):
             pygame.time.delay(1000)
             self.rect.x, self.rect.y = self.reset
             self.makeANew = False
-            self.lives -= 1
+            #self.lives -= 1
             self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
             self.remove(self.group)
             self.resetAccel()

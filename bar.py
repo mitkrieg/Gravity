@@ -20,7 +20,7 @@ class Bar(Sprite):
         self.group = friends
         self.screen = place
         self.nextPosition = 0
-        self.images = [(str('venus.png'))]
+        self.images = [(str('venus.png')),(str('saturny.png'))]
         
 
 class ToolBar(Bar):
@@ -105,14 +105,17 @@ class ToolBar(Bar):
         self.itemsTab.earth_item.light()
         
     def next_level(self,level):
-        self.barGoal.change_image(self.images[self.nextPosition])
+        self.barGoal.change_image(self.images[level-2])
         self.barGoal.resize(40,40)
         self.item_one_reset()
         self.reset_lives()
         self.score.update(2000)
+        self.nextPosition += 1
         if level == 2:
             self.item_two_reset()
             self.items_two_limit = 1
+        elif level == 3:
+            print "3333: coming soon"
         
     
 class Score(Sprite):
@@ -201,10 +204,32 @@ class MenuWidget(Bar):
         self.first_open = False
         self.open = False
         self.arrow = arrow
+        #self.open_it = False
+        #self.close_it = False
         
       
-    def update(self,pos,other):
+    def update(self,pos,other,boo = False):
         newx, newy = pos
+        '''
+        if self.open_it and self.rect.y > 428:
+            amt = -16
+            self.rect.y += amt
+            self.widget_rect.y += amt
+            self.quit_rect.y += amt
+        elif self.open_it:
+            self.open = True
+            self.open_it = False
+                
+        if self.close_it and self.rect.y <= 723:
+            amt = 16
+            self.rect.y += amt
+            self.widget_rect.y += amt
+            self.quit_rect.y += amt
+        elif self.close_it:
+            self.close_it = False
+            self.open = False
+            '''
+
         if self.rect.y <= 723 and self.rect.y > 428 and not self.open:
             self.rect.y = newy-23
             self.widget_rect.y = newy-23
@@ -230,37 +255,52 @@ class MenuWidget(Bar):
             self.rect.y = 429
             self.widget_rect.y = 431
             self.open = True
+            self.quit_rect.y = 642
             if not self.first_open:
                 self.arrow.kill()
                 self.first_open = True
         else:
             self.rect.y = 723
             self.widget_rect.y = 726
+            self.quit_rect.y = 900
             self.open = False
+
+
+    def change_state(self):
+        if self.open:
+            self.close_it = True
+            print "closing"
+        if not self.open:
+            print "opening"
+            self.open_it = True
+        
+        
+        
+        
 
    
 class Lives(Bar):
     def __init__(self,x,y,friends,place,image=str('3lives.png')):
         Bar.__init__(self,x,y,friends,place,image)
-        self.next_life = 4
+        self.next_life = 5
         self.five_lives = self.image
-        self.life_image = [(str('1life.png')),(str('2lives.png')),
+        self.life_image = [(str('0life.png')),(str('1life.png')),(str('2lives.png')),
                            (str('3lives.png')),(str('4lives.png')),
                            (str('5lives.png'))]
         
     def update(self):
-        self.image = system.load_graphics(self.life_image[self.next_life-1])
         self.next_life -= 1
+        self.image = system.load_graphics(self.life_image[self.next_life])
 
     def reset(self):
-        self.next_life = 4
+        self.next_life = 5
         self.image = system.load_graphics(self.life_image[self.next_life])
 
     def back_to_three(self,re_group):
-        self.next_life = 4
+        self.next_life = 5
         self.image = system.load_graphics(self.life_image[self.next_life])
-        if re_group:
-            self.add(self.group)
+        #if re_group:
+         #   self.add(self.group)
 
     def no_lives(self):
         self.kill()
