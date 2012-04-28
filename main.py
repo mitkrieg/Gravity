@@ -402,7 +402,6 @@ Game(level).run()
 #http://www.pygame.org/project-pylygon-1718-.html
 
 ////////////TODO
-#INSTRUCTIONS OPTION IN MENU WIDGET
 OTHER OBSTACLES (enemy ships, asteroids, comets)
 SAVING
 LOADING
