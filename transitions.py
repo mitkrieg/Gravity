@@ -11,8 +11,8 @@ class Intro(Sprite):
         Sprite.__init__(self)
         self.image = load_graphics(image)
         self.rect = self.image.get_rect()
-        self.rect.x = 0
-        self.rect.y = 0
+        self.rect.x = x
+        self.rect.y = y
         self.group = group
         self.starting = False
         self.instructions = False
@@ -45,6 +45,10 @@ class Intro(Sprite):
         else:
             self.instructions = False
         
+
+class Instructions(Intro):
+    def __init__(self,x,y,group,image=str('instructions.png')):
+        Intro.__init__(self,x,y,group,image)
         
 
 class Transition(Sprite):

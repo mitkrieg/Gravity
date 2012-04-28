@@ -94,7 +94,7 @@ class ToolBar(Bar):
             if self.items_two_placed >= self.items_two_limit:
                 self.itemsTab.earth_item.dark()
         elif self.menuWidget.instructions_rect.collidepoint(pos) and self.menuWidget.open:
-            print "instructions"
+            self.game.inStructionees()
         return False
 
     def item_one_reset(self):
@@ -202,7 +202,7 @@ class MenuWidget(Bar):
     def __init__(self,x,y,friends,place,arrow,image=str('widget.png')):
         Bar.__init__(self,x,y,friends,place,image)
         self.widget_rect = pygame.Rect(x+188,726,27,21)
-        self.quit_rect = pygame.Rect(x+57,887,99,26)
+        self.quit_rect = pygame.Rect(x+57,887,99,42)
         self.instructions_rect = pygame.Rect(726,1000,149,20)
         self.first_open = False
         self.open = False
@@ -216,7 +216,7 @@ class MenuWidget(Bar):
         if self.rect.y <= 723 and self.rect.y > 428 and not self.open:
             self.rect.y = newy-23
             self.widget_rect.y = newy-23
-            self.quit_rect.y = 650
+            self.quit_rect.y = 654
             self.instructions_rect.y = 534
         elif self.rect.y <= 723 and self.rect.y > 428 and self.open:
             self.rect.y = newy+1
@@ -232,7 +232,7 @@ class MenuWidget(Bar):
             self.rect.y = 429
             self.widget_rect.y = 431
             self.open = True
-            self.quit_rect.y = 650
+            self.quit_rect.y = 654
             self.instructions_rect.y = 534
             other.grabbed = None
 
@@ -241,7 +241,7 @@ class MenuWidget(Bar):
             self.rect.y = 429
             self.widget_rect.y = 431
             self.open = True
-            self.quit_rect.y = 650
+            self.quit_rect.y = 654
             self.instructions_rect.y = 534
             if not self.first_open:
                 self.arrow.kill()

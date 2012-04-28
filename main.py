@@ -8,7 +8,7 @@ from player import Player
 #from goal import Goal
 from bar import *
 from starfield import Starfield
-from transitions import Intro, Transition, GameOverScreen
+from transitions import Intro, Transition, GameOverScreen, Instructions
 from obstacles import *
 from user_items import UserPlanet
 import sys
@@ -331,11 +331,48 @@ class Game(object):
         self.player.restart()
         self.over_screen.kill()
 
-    def instructions(self):
-        pass
-                
-                    
+    def inStructionees(self):
+        self.instructions = Instructions(0,-750,self.startItems)
+        self.instructions.instruct(True)
 
+        while True:
+            self.clock.tick(self.fps)
+            pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
+
+            if self.instructions.instruct and self.instructions.rect.y < 0:
+                self.instructions.rect.y += 50
+
+            elif not self.instructions.instruct and self.instructions.rect.y > -750:
+                self.instructions.rect.y -= 50
+            elif not self.instructions.instruct and self.instructions.rect.y <= -750:
+                self.instructions.kill()
+                return
+            
+            
+            for evt in pygame.event.get():
+                if evt.type == QUIT:
+                    self.quit()
+                    return
+                elif evt.type == KEYDOWN:
+                    if evt.key == K_RETURN:
+                        self.instructions.instruct = False
+                    elif evt.key == K_ESCAPE:
+                        self.quit()
+                        return
+
+            self.stars.draw()
+            self.player.drawTails()
+            self.goalCollide.draw(self.screen)
+            self.masslessObstacles.draw(self.screen)
+            self.userPlacedObjects.draw(self.screen)
+            self.toolbar.draw(self.screen)
+            self.blackHoles.draw(self.screen)
+            self.playerGroup.draw(self.screen)  
+            self.startItems.draw(self.screen)
+                
+            pygame.display.flip()
+    
+        
     def run(self,level=0):
         self.done = False
         self.clock = pygame.time.Clock()
