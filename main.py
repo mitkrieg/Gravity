@@ -9,7 +9,7 @@ from player import Player
 from bar import *
 from starfield import Starfield
 from transitions import Intro, Transition, GameOverScreen
-from obstacles import BlackHole
+from obstacles import *
 from user_items import UserPlanet
 import sys
 
@@ -31,6 +31,7 @@ class Game(object):
         self.tails = RenderUpdates()
         self.blackHoles = RenderUpdates()
         self.obstacles = RenderUpdates()
+        self.masslessObstacles = RenderUpdates()
         self.goalCollide = Group()
         self.toolbar = OrderedUpdates()
         if level == 0:
@@ -43,6 +44,16 @@ class Game(object):
         self.levelUp = True
         self.stars = Starfield(self.screen,1000,626,200)
         BlackHole(339,70,self.blackHoles,self.screen,80,71,16)
+        temp = EarthRounder(513,313,self.masslessObstacles,self.screen,40,0)
+        temp.rotate(55)
+        temp = Alien(60,188,self.masslessObstacles,self.screen,34,1)
+        temp.rotate(-15)
+        temp = Alien(107,268,self.masslessObstacles,self.screen,35,1)
+        temp.rotate(-75)
+        temp = Alien(816,533,self.masslessObstacles,self.screen,39,0)
+        temp.rotate(-13)
+        temp = BlueUpAnDown(811,227,self.masslessObstacles,self.screen,34,1)
+        temp.rotate(80)
         self.obstacles.add(self.blackHoles)
         self.obstacles.add(self.goalCollide)
         self.freeb = False
@@ -77,6 +88,7 @@ class Game(object):
         self.stars.draw()
         self.goalCollide.draw(self.screen)
         self.toolbar.draw(self.screen)
+        self.masslessObstacles.draw(self.screen)
         self.playerGroup.draw(self.screen)
         self.blackHoles.draw(self.screen)
         self.startItems.draw(self.screen)
@@ -101,7 +113,8 @@ class Game(object):
                     #self.quit()
                 #    self.bar.grabbed = self.bar.menuWidget
                 if evt.key == K_z:
-                    print self.bar.items_one_placed   
+                    print self.bar.items_one_placed  
+                
             #elif evt.type == KEYUP:
                 #if evt.key == K_ESCAPE:
                  #   self.bar.clear_grabbed()
@@ -126,6 +139,9 @@ class Game(object):
                     obj.drop(self.blackHoles)
              
 
+        if self.player.makeANew:
+            self.masslessObstacles.update()
+
      
         self.stars.draw()
         self.blackHoles.update()
@@ -133,6 +149,7 @@ class Game(object):
         self.blackHoles.draw(self.screen)
         self.userPlacedObjects.update(pos)
         self.userPlacedObjects.draw(self.screen)
+        self.masslessObstacles.draw(self.screen)
         self.goalCollide.draw(self.screen)
         self.toolbar.draw(self.screen)
         self.player.drawTails()
@@ -151,14 +168,22 @@ class Game(object):
             self.over_screen = GameOverScreen(293,161,self.screen)
             self.gameOver()
                 
-        if pygame.sprite.spritecollideany(self.player, self.goalCollide) != None:
+        if pygame.sprite.collide_mask(self.player, self.goal):
             self.next_level()
-        elif pygame.sprite.spritecollideany(self.player,self.blackHoles) != None:
-            self.player.blackHoleCollision(True,False)
 
+        for obj in self.blackHoles:
+            if pygame.sprite.collide_mask(self.player,obj):
+                self.player.blackHoleCollision(True,False)
+
+        for obj in self.masslessObstacles:
+            if  pygame.sprite.collide_mask(self.player,obj):
+                self.player.update(True)
+        
         for obj in self.userPlacedObjects:
             if pygame.sprite.collide_mask(self.player,obj) and not obj.grabbed:
                 self.player.update(True)
+        
+
         pygame.display.flip()
 
 
@@ -183,12 +208,28 @@ class Game(object):
                     self.goal.next_level(self.level)
                     self.bar.next_level(self.level)
                     self.userPlacedObjects.empty()
+                    self.obstacles.empty()
                     self.freeb = False
                     self.bar.itemsTab.earth_item.light()
+                    self.masslessObstacles.empty()
+                    temp = Alien(55,143,self.masslessObstacles,self.screen,39,1)
+                    temp.rotate(-66)
+                    temp = Alien(189,98,self.masslessObstacles,self.screen,36,1)
+                    temp.rotate(23)
+                    temp = Alien(107,228,self.masslessObstacles,self.screen,32,1)
+                    temp.rotate(17)
+                    temp = Alien(249,244,self.masslessObstacles,self.screen,41,1)
+                    temp.rotate(80)
+                    temp = Alien(898,561,self.masslessObstacles,self.screen,45,2)
+                    temp.rotate(22)
+                    temp = Alien(730,545,self.masslessObstacles,self.screen,40,2)
+                    temp.rotate(-30)
                     for hole in self.blackHoles:
                         hole.move(842,388)
                     hole = BlackHole(388,189,self.blackHoles,self.screen,80,71,16)
                     hole.flip()
+                    self.obstacles.add(self.blackHoles)
+                    self.obstacles.add(self.goal)
 
                 self.player.restart()
                 changed = True
@@ -197,6 +238,7 @@ class Game(object):
             self.startItems.update()
             self.stars.draw()
             self.goalCollide.draw(self.screen)
+            self.masslessObstacles.draw(self.screen)
             self.userPlacedObjects.draw(self.screen)
             self.toolbar.draw(self.screen)
             self.player.drawTails()
@@ -228,14 +270,25 @@ class Game(object):
                     if evt.key == K_ESCAPE:
                         self.quit()
             
-                        
-            if pygame.sprite.spritecollideany(self.player,self.blackHoles) != None:
-                self.player.blackHoleCollision(True,False)
+            
+            for obj in self.blackHoles:
+                if pygame.sprite.collide_mask(self.player,obj):
+                    self.player.blackHoleCollision(True,False)
+
+            for obj in self.masslessObstacles:
+                if  pygame.sprite.collide_mask(self.player,obj):
+                    self.player.update(True)
+        
+            for obj in self.userPlacedObjects:
+                if pygame.sprite.collide_mask(self.player,obj) and not obj.grabbed:
+                    self.player.update(True)
+            
 
             self.startItems.update()
             self.stars.draw()
             self.player.drawTails()
             self.goalCollide.draw(self.screen)
+            self.masslessObstacles.draw(self.screen)
             self.userPlacedObjects.draw(self.screen)
             self.toolbar.draw(self.screen)
             self.blackHoles.draw(self.screen)
