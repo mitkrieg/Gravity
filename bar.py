@@ -90,7 +90,7 @@ class ToolBar(Bar):
             y -= 30
             self.grabbed = UserPlanet(x,y,65,65,30,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,2,self.goal,str('earth.png'))
             self.items_two_placed += 1
-            print self.items_two_placed
+            #print self.items_two_placed
             if self.items_two_placed >= self.items_two_limit:
                 self.itemsTab.earth_item.dark()
         elif self.menuWidget.instructions_rect.collidepoint(pos) and self.menuWidget.open:
@@ -207,10 +207,7 @@ class MenuWidget(Bar):
         self.first_open = False
         self.open = False
         self.arrow = arrow
-        #self.open_it = False
-        #self.close_it = False
-        
-      
+              
     def update(self,pos,other,boo = False):
         newx, newy = pos
         if self.rect.y <= 723 and self.rect.y > 428 and not self.open:
@@ -257,9 +254,9 @@ class MenuWidget(Bar):
     def change_state(self):
         if self.open:
             self.close_it = True
-            print "closing"
+            #print "closing"
         if not self.open:
-            print "opening"
+            #print "opening"
             self.open_it = True
         
         
@@ -287,8 +284,7 @@ class Lives(Bar):
     def back_to_three(self,re_group):
         self.next_life = 5
         self.image = system.load_graphics(self.life_image[self.next_life])
-        #if re_group:
-         #   self.add(self.group)
+        
 
     def no_lives(self):
         self.kill()

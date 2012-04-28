@@ -80,17 +80,11 @@ class EarthRounder(Alien):
         self.forth = True
 
     def update(self):
-        #min x = 513
-        #max x = 622
-        #min y = 285
-        #max y = 313
         if self.rect.x < 620 and self.forth:
             self.rect.x += 2
             
-            #self.rect.y -= 3
         elif self.rect.x > 514 and not self.forth:
             self.rect.x -= 2
-            #self.rect.y += 3
         elif self.rect.x >= 620:
             self.forth = False
         else:

@@ -85,7 +85,6 @@ class Player(Sprite):
             pygame.time.delay(1000)
             self.rect.x, self.rect.y = self.reset
             self.makeANew = False
-            #self.lives -= 1
             self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
             self.remove(self.group)
             self.resetAccel()
@@ -101,7 +100,6 @@ class Player(Sprite):
             pygame.time.delay(1000)
             self.rect.x, self.rect.y = self.reset
             self.makeANew = False
-            #self.lives -= 1
             self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
             self.remove(self.group)
             self.resetAccel()
@@ -150,10 +148,10 @@ class Player(Sprite):
     def dead(self, boo):
         if self.rect.x > self.maxX-self.rect.w or self.rect.x < 0:
             self.alive = False
-            print "oob"
+            #print "oob"
         elif self.rect.y > self.maxY-self.rect.h or self.rect.y < 0:
             self.alive = False
-            print "oob"
+            #print "oob"
         elif not boo:
             self.alive =  True
         else:

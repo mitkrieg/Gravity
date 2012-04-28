@@ -110,16 +110,9 @@ class Game(object):
             elif evt.type == KEYDOWN:
                 if evt.key == K_ESCAPE and not self.bar.itemsTab.open and self.bar.grabbed == None:
                     self.bar.menuWidget.dropped()
-                    #self.quit()
-                #    self.bar.grabbed = self.bar.menuWidget
-                if evt.key == K_z:
-                    print self.bar.items_one_placed  
-                
-            #elif evt.type == KEYUP:
-                #if evt.key == K_ESCAPE:
-                 #   self.bar.clear_grabbed()
+                                        
             elif evt.type == MOUSEBUTTONDOWN:
-                print pos
+                #print pos
                 should_freebie = self.bar.collision_test(pos,self.player,evt.button)
                 if should_freebie and not self.freeb:
                     self.freebie()
@@ -132,7 +125,6 @@ class Game(object):
                     for obj in self.userPlacedObjects:
                         if obj.rect.collidepoint(pos) and not self.player.makeANew and not self.bar.menuWidget.open:
                             obj.remove()
-                #print evt.button
             elif evt.type == MOUSEBUTTONUP:
                 self.bar.clear_grabbed()
                 for obj in self.userPlacedObjects:
