@@ -93,6 +93,8 @@ class ToolBar(Bar):
             print self.items_two_placed
             if self.items_two_placed >= self.items_two_limit:
                 self.itemsTab.earth_item.dark()
+        elif self.menuWidget.instructions_rect.collidepoint(pos) and self.menuWidget.open:
+            print "instructions"
         return False
 
     def item_one_reset(self):
@@ -201,6 +203,7 @@ class MenuWidget(Bar):
         Bar.__init__(self,x,y,friends,place,image)
         self.widget_rect = pygame.Rect(x+188,726,27,21)
         self.quit_rect = pygame.Rect(x+57,887,99,26)
+        self.instructions_rect = pygame.Rect(726,1000,149,20)
         self.first_open = False
         self.open = False
         self.arrow = arrow
@@ -210,34 +213,16 @@ class MenuWidget(Bar):
       
     def update(self,pos,other,boo = False):
         newx, newy = pos
-        '''
-        if self.open_it and self.rect.y > 428:
-            amt = -16
-            self.rect.y += amt
-            self.widget_rect.y += amt
-            self.quit_rect.y += amt
-        elif self.open_it:
-            self.open = True
-            self.open_it = False
-                
-        if self.close_it and self.rect.y <= 723:
-            amt = 16
-            self.rect.y += amt
-            self.widget_rect.y += amt
-            self.quit_rect.y += amt
-        elif self.close_it:
-            self.close_it = False
-            self.open = False
-            '''
-
         if self.rect.y <= 723 and self.rect.y > 428 and not self.open:
             self.rect.y = newy-23
             self.widget_rect.y = newy-23
-            self.quit_rect.y = 637
+            self.quit_rect.y = 650
+            self.instructions_rect.y = 534
         elif self.rect.y <= 723 and self.rect.y > 428 and self.open:
             self.rect.y = newy+1
             self.widget_rect.y = newy-3
             self.quit_rect.y = 1000
+            self.instructions_rect.y = 1000
         elif self.rect.y > 575:
             self.rect.y = 723
             self.widget_rect.y = 726
@@ -247,7 +232,8 @@ class MenuWidget(Bar):
             self.rect.y = 429
             self.widget_rect.y = 431
             self.open = True
-            self.quit_rect.y = 642
+            self.quit_rect.y = 650
+            self.instructions_rect.y = 534
             other.grabbed = None
 
     def dropped(self):
@@ -255,7 +241,8 @@ class MenuWidget(Bar):
             self.rect.y = 429
             self.widget_rect.y = 431
             self.open = True
-            self.quit_rect.y = 642
+            self.quit_rect.y = 650
+            self.instructions_rect.y = 534
             if not self.first_open:
                 self.arrow.kill()
                 self.first_open = True
@@ -263,6 +250,7 @@ class MenuWidget(Bar):
             self.rect.y = 723
             self.widget_rect.y = 726
             self.quit_rect.y = 900
+            self.instructions_rect.y = 1000
             self.open = False
 
 

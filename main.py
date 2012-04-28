@@ -144,6 +144,7 @@ class Game(object):
 
      
         self.stars.draw()
+        self.player.drawTails()
         self.blackHoles.update()
         self.bar.update(pos)
         self.blackHoles.draw(self.screen)
@@ -152,7 +153,6 @@ class Game(object):
         self.masslessObstacles.draw(self.screen)
         self.goalCollide.draw(self.screen)
         self.toolbar.draw(self.screen)
-        self.player.drawTails()
         self.playerGroup.update()
         self.playerGroup.draw(self.screen)  
 
@@ -237,11 +237,11 @@ class Game(object):
                 
             self.startItems.update()
             self.stars.draw()
+            self.player.drawTails()
             self.goalCollide.draw(self.screen)
             self.masslessObstacles.draw(self.screen)
             self.userPlacedObjects.draw(self.screen)
             self.toolbar.draw(self.screen)
-            self.player.drawTails()
             self.blackHoles.draw(self.screen)
             self.playerGroup.draw(self.screen)  
             self.startItems.draw(self.screen)
@@ -285,6 +285,7 @@ class Game(object):
             
 
             self.startItems.update()
+            self.masslessObstacles.update()
             self.stars.draw()
             self.player.drawTails()
             self.goalCollide.draw(self.screen)
@@ -329,6 +330,9 @@ class Game(object):
         self.bar.reset_lives_over()
         self.player.restart()
         self.over_screen.kill()
+
+    def instructions(self):
+        pass
                 
                     
 
@@ -362,8 +366,6 @@ Game(level).run()
 
 ////////////TODO
 #INSTRUCTIONS OPTION IN MENU WIDGET
-#WARNING FOR ITEM LIMIT###
-#RIGHT CLICK FOR EDITING OBJECT
 OTHER OBSTACLES (enemy ships, asteroids, comets)
 SAVING
 LOADING
