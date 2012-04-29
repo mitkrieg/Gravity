@@ -50,7 +50,7 @@ def saveFile(level,lives,score):
     if thereIsASaveFile():
         fil = open('save.txt','w')
         
-        saveInfo = [level,lives,score]
+        saveInfo = ((level,lives,score))
         s = pickle.dumps(saveInfo)
 
         fil.write(s)
