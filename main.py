@@ -535,8 +535,15 @@ class Game(object):
         temp.rotate(22)
         temp = Alien(471,486,self.masslessObstacles,self.screen,22,3)
         temp.rotate(80)
+        temp = Alien(617,594,self.masslessObstacles,self.screen,25,3)
+        temp.rotate(77)
+        temp = Alien(530,586,self.masslessObstacles,self.screen,23,3)
+        temp = Alien(448,573,self.masslessObstacles,self.screen,27,3)
+        temp.rotate(-32)
         BlackHole(126,85,self.blackHoles,self.screen,80,71,28)
-
+        temp = TwitchyOnes(30,163,self.masslessObstacles,self.screen,30,2)
+        temp = TwitchyOnes(96,268,self.masslessObstacles,self.screen,30,2)
+        temp.rotate(-70)
         self.obstacles.add(self.blackHoles)
         self.obstacles.add(self.goal)
 
