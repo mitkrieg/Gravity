@@ -228,6 +228,9 @@ class Game(object):
             if not trans_effect or self.transition.rect.x >= -50 and not changed:
                 if self.level == 2:
                     self.make_level_two(add_score_bool)
+                if self.level == 3:
+                    self.make_level_three(add_score_bool)
+                    print "level 3"
 
                 if add_score_bool:
                     self.bar.score.update(2000)
@@ -441,7 +444,8 @@ class Game(object):
     def run(self,level=0):
         self.done = False
         self.clock = pygame.time.Clock()
-        if self.gotoLevel > 1 and self.gotoLevel < 3:
+        if self.gotoLevel > 1 and self.gotoLevel < 4:
+            self.transition = Transition(-1314,0,self.screen,self.startItems)
             self.tick()
             self.level = self.gotoLevel
             self.next_level()
@@ -480,12 +484,20 @@ class Game(object):
         self.obstacles.add(self.blackHoles)
         self.obstacles.add(self.goal)
 
+    def make_level_three(self,reset_lives_bool):
+        self.goal.next_level(self.level)
+        self.bar.next_level(self.level,reset_lives_bool)
+        self.userPlacedObjects.empty()
+        self.blackHoles.empty()
+        self.obstacles.empty()
+        self.freeb = False
+        self.bar.itemsTab.earth_item.light()
+        self.masslessObstacles.empty()
 
+        self.obstacles.add(self.goal)
 
-
-
-
-
+        
+    
 
 if len(sys.argv) > 1:
     level = sys.argv[1]

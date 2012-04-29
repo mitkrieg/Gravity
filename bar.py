@@ -41,6 +41,8 @@ class ToolBar(Bar):
         self.items_one_placed = 0
         self.items_two_limit = 0
         self.items_two_placed = 0
+        self.items_three_placed = 0
+        self.items_three_limit = 0
         self.goal = goal
                 
     def lives_over(self):
@@ -86,6 +88,7 @@ class ToolBar(Bar):
                 self.items_one.x = -30
                 self.itemsTab.rock_item.dark()
         elif self.itemsTab.earth_item.rect.collidepoint(pos) and self.itemsTab.open and self.itemsTab.earth_item and self.items_two_placed < self.items_two_limit:
+            print "touch earth"
             x,y = pos
             x -= 30
             y -= 30
@@ -94,6 +97,15 @@ class ToolBar(Bar):
             #print self.items_two_placed
             if self.items_two_placed >= self.items_two_limit:
                 self.itemsTab.earth_item.dark()
+        elif self.itemsTab.venus_item.rect.collidepoint(pos) and self.itemsTab.open and self.itemsTab.venus_item and self.items_three_placed < self.items_three_limit:
+            print "touch venus"
+            x,y = pos
+            x -= 30
+            y -= 30
+            self.grabbed = UserPlanet(x,y,68,68,40,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,3,self.goal,str('venus.png'))
+            self.items_three_placed += 1
+            if self.items_three_placed >= self.items_three_limit:
+                self.itemsTab.venus_item.dark()
         elif self.menuWidget.instructions_rect.collidepoint(pos) and self.menuWidget.open:
             self.game.inStructionees()
         elif self.menuWidget.save_rect.collidepoint(pos) and self.menuWidget.open:
@@ -108,6 +120,10 @@ class ToolBar(Bar):
     def item_two_reset(self):
         self.items_two_placed = 0
         self.itemsTab.earth_item.light()
+
+    def item_three_reset(self):
+        self.items_three_placed = 0
+        self.itemsTab.venus_item.light()
         
     def next_level(self,level,reset_lives_bool):
         self.barGoal.change_image(self.images[level-2])
@@ -120,6 +136,11 @@ class ToolBar(Bar):
             self.item_two_reset()
             self.items_two_limit = 1
         elif level == 3:
+            self.item_three_reset()
+            self.items_two_limit = 1
+            self.items_three_limit = 1
+            self.item_two_reset()
+            self.item_one_reset()
             print "3333: coming soon"
         
     

@@ -51,6 +51,8 @@ class UserPlanet(Sprite):
                 self.bar.item_one_reset()
             elif self.kind == 2:
                 self.bar.item_two_reset()
+            elif self.kind == 3:
+                self.bar.item_three_reset()
     
     def grab(self,pos):
         x,y = pos
@@ -70,6 +72,8 @@ class UserPlanet(Sprite):
                 self.bar.item_one_reset()
             elif self.kind == 2:
                 self.bar.item_two_reset()
+            elif self.kind == 3:
+                self.bar.item_three_reset()
         elif pygame.sprite.collide_mask(self,self.player) or pygame.sprite.spritecollideany(self,blackHoles) or pygame.sprite.collide_mask(self,self.goal):
             x,y = self.og_place
             self.rect.x = x
@@ -84,4 +88,6 @@ class UserPlanet(Sprite):
         if self.kind == 1:
             self.bar.item_one_reset()
         elif self.kind == 2:
+            self.bar.item_two_reset()
+        elif self.kind == 3:
             self.bar.item_two_reset()
