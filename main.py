@@ -574,3 +574,8 @@ level = int(level)
 
 Game(level).run()
 
+'''
+add level 3 and level 4
+make a game beat screen
+try and figure out why the slowdown is happening
+'''
