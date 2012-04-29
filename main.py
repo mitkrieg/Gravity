@@ -76,8 +76,6 @@ class Game(object):
         pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
         
         for evt in pygame.event.get():
-            if evt.type == MOUSEBUTTONDOWN:
-            #print pygame.mouse.get_pos()
             if evt.type == QUIT:
                 self.quit()
             if evt.type == KEYDOWN:
