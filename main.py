@@ -26,11 +26,6 @@ class Game(object):
             pygame.display.set_caption(self.title)
         self.fps = 30
 
-        #if system.thereIsASaveFile():
-         #   print "file found"
-        #else:
-        #    print "file not found"
-
         #group definitions
         self.userPlacedObjects = Group()
         self.startItems = RenderUpdates()
@@ -43,8 +38,6 @@ class Game(object):
         self.toolbar = OrderedUpdates()
 
         #level/transition/player & enemy/obstacle creation hocus pocus
-        if level == 0:
-            self.intro_screen = Intro(0,0,self.startItems)
         self.goal = Goal(573,372,self.goalCollide,30)
         self.bar = ToolBar(0,626,self.toolbar,self.screen,self,self.goal)
         self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,624,(2,-2),self.tails,self)
@@ -67,6 +60,13 @@ class Game(object):
         self.obstacles.add(self.goalCollide)
         self.freeb = False
         self.gotoLevel = level
+
+        if system.thereIsASaveFile() and level == 0:
+            self.intro_screen = Intro(0,0,self.startItems,str('title_w_file.png'))
+            self.saveFile = True
+        elif level == 0:
+            self.intro_screen = Intro(0,0,self.startItems)
+            self.saveFile = False
       
     def quit(self):
         self.done = True
@@ -82,11 +82,17 @@ class Game(object):
                 if evt.key == K_ESCAPE:
                     self.quit()
                 elif evt.key == K_RETURN:
-                    self.intro_screen.begin()
+                    if not self.saveFile:
+                        self.intro_screen.begin()
+                    else:
+                        print "load file"
                 elif evt.key == K_RIGHT:
                     self.intro_screen.instruct(True)
                 elif evt.key == K_LEFT:
                     self.intro_screen.instruct(False)
+                elif evt.key == K_n:
+                    if self.saveFile:
+                        self.intro_screen.begin()
 
        
         if self.intro_screen.next_level():
