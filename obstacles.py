@@ -81,35 +81,33 @@ class EarthRounder(Alien):
     def __init__(self,x,y,group,surf,size,kind):
         Alien.__init__(self,x,y,group,surf,size,kind)
         self.forth = True
-<<<<<<< HEAD
 
     def update(self,player_status):
         if player_status:
             if self.rect.x < 620 and self.forth:
                 self.rect.x += 2
-=======
+
         
     def update(self):
         if self.rect.x < 620 and self.forth:
             self.rect.x += 2
->>>>>>> 8fba482a9a474a1c6b12e8e48edf5486455631ad
             
-            elif self.rect.x > 514 and not self.forth:
-                self.rect.x -= 2
-            elif self.rect.x >= 620:
-                self.forth = False
-            else:
-                self.forth = True
+        elif self.rect.x > 514 and not self.forth:
+            self.rect.x -= 2
+        elif self.rect.x >= 620:
+            self.forth = False
+        else:
+            self.forth = True
 
-            if self.rect.x < 600 and self.forth:
-                self.rect.y -= 3
-            elif self.rect.x > 600 and self.forth:
-                self.rect.y += 2
-
-            elif self.rect.x > 600 and not self.forth:
-                self.rect.y -= 2
-            elif self.rect.x < 600 and not self.forth:
-                self.rect.y += 3
+        if self.rect.x < 600 and self.forth:
+            self.rect.y -= 3
+        elif self.rect.x > 600 and self.forth:
+            self.rect.y += 2
+            
+        elif self.rect.x > 600 and not self.forth:
+            self.rect.y -= 2
+        elif self.rect.x < 600 and not self.forth:
+            self.rect.y += 3
 
 class BlueUpAnDown(Alien):
     def __init__(self,x,y,group,surf,size,kind,moveTop,moveBottom):

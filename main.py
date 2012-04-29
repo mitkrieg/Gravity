@@ -574,21 +574,3 @@ level = int(level)
 
 Game(level).run()
 
-'''////////////Pylygon Methods
-#http://www.pygame.org/project-pylygon-1718-.html
-
-////////////TODO
-OTHER OBSTACLES (enemy ships, asteroids, comets)
-SAVING
-LOADING
-LEVELS
-
-////////////BUGS
-##SQUASHED BUGS
-USER PLACING OBJECT ON TOP OF PLAYER, FREAKS OUT!
-
-////////////DONE(ish)
-PLAYER TRAIL
-PLAYER OBJECT
-GOAL
-'''
