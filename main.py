@@ -18,7 +18,7 @@ class Game(object):
     title = 'Gravity'
     screen_size = 1000, 750
     
-    def __init__(self,level=1):
+    def __init__(self,level=0):
         pygame.init()
         
         self.screen = pygame.display.set_mode(self.screen_size)
@@ -505,7 +505,7 @@ class Game(object):
 if len(sys.argv) > 1:
     level = sys.argv[1]
 else:
-    level = 1
+    level = 0
 
 level = int(level)
 
