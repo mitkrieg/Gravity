@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import *
 from pygame.sprite import Sprite
 import system
+import random
 
 class BlackHole(Sprite):
     image = None
@@ -101,21 +102,58 @@ class EarthRounder(Alien):
             self.rect.y += 3
 
 class BlueUpAnDown(Alien):
-    def __init__(self,x,y,group,surf,size,kind):
+    def __init__(self,x,y,group,surf,size,kind,moveTop,moveBottom):
         Alien.__init__(self,x,y,group,surf,size,kind)
         self.forth = False
-        self.shouldUpdate = 0
+        self.shouldUpdate = 1
+        self.moveTop = moveTop
+        self.moveBottom = moveBottom
 
     def update(self):
         if self.shouldUpdate == 1:
-            if self.rect.y > 97 and not self.forth:
+            if self.rect.y > self.moveTop and not self.forth:
                 self.rect.y -= 1
-            elif self.rect.y < 239 and self.forth:
+            elif self.rect.y < self.moveBottom and self.forth:
                 self.rect.y += 1
-            elif self.rect.y >= 239:
+            elif self.rect.y >= self.moveBottom:
                 self.forth = False
             else:
                 self.forth = True
-            self.shouldUpdate = 0
+            #self.shouldUpdate = 0
         else:
             self.shouldUpdate += 1
+
+
+
+class TwitchyOnes(Alien):
+    def __init__(self,x,y,group,surf,size,kind):
+        Alien.__init__(self,x,y,group,surf,size,kind)
+        self.twitch = 23
+
+
+    def update(self):
+        should = random.randrange(30)
+        if should == self.twitch:
+            centaur = self.rect.center
+            amount = random.randrange(-20,20)
+            self.image = pygame.transform.rotate(self.image,amount)
+            self.rect = self.image.get_rect()
+            self.rect.center = centaur
+
+
+class Rotator(Alien):
+    def __init__(self,x,y,group,surf,size,kind,rotate_start):
+        Alien.__init__(self,x,y,group,surf,size,kind)
+        self.rotate(-70)
+        self.backup = self.image
+        self.amount = 1
+
+    def update(self):
+        centaur = self.rect.center
+        self.image = pygame.transform.rotate(self.backup,self.amount)
+        self.rect = self.image.get_rect()
+        self.rect.center = centaur
+        if self.amount < 360:
+            self.amount += 1
+        else:
+            self.amount = 1

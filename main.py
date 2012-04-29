@@ -52,7 +52,7 @@ class Game(object):
         temp.rotate(-75)
         temp = Alien(816,533,self.masslessObstacles,self.screen,39,0)
         temp.rotate(-13)
-        temp = BlueUpAnDown(811,227,self.masslessObstacles,self.screen,34,1)
+        temp = BlueUpAnDown(811,227,self.masslessObstacles,self.screen,34,1,97,239)
         temp.rotate(80)
         self.obstacles.add(self.blackHoles)
         self.obstacles.add(self.goalCollide)
@@ -112,7 +112,7 @@ class Game(object):
                     self.bar.menuWidget.dropped()
                                         
             elif evt.type == MOUSEBUTTONDOWN:
-                #print pos
+                print pos
                 should_freebie = self.bar.collision_test(pos,self.player,evt.button)
                 if should_freebie and not self.freeb:
                     self.freebie()
@@ -200,6 +200,7 @@ class Game(object):
                     self.goal.next_level(self.level)
                     self.bar.next_level(self.level)
                     self.userPlacedObjects.empty()
+                    self.blackHoles.empty()
                     self.obstacles.empty()
                     self.freeb = False
                     self.bar.itemsTab.earth_item.light()
@@ -210,14 +211,15 @@ class Game(object):
                     temp.rotate(23)
                     temp = Alien(107,228,self.masslessObstacles,self.screen,32,1)
                     temp.rotate(17)
-                    temp = Alien(249,244,self.masslessObstacles,self.screen,41,1)
+                    temp = BlueUpAnDown(249,244,self.masslessObstacles,self.screen,41,1,204,245)
                     temp.rotate(80)
-                    temp = Alien(898,561,self.masslessObstacles,self.screen,45,2)
+                    temp = TwitchyOnes(898,541,self.masslessObstacles,self.screen,45,2)
                     temp.rotate(22)
-                    temp = Alien(730,545,self.masslessObstacles,self.screen,40,2)
+                    temp = TwitchyOnes(730,545,self.masslessObstacles,self.screen,40,2)
                     temp.rotate(-30)
-                    for hole in self.blackHoles:
-                        hole.move(842,388)
+                    temp = Rotator(525,121,self.masslessObstacles,self.screen,50,0,-70)
+                   
+                    BlackHole(842,388,self.blackHoles,self.screen,80,71,16)
                     hole = BlackHole(388,189,self.blackHoles,self.screen,80,71,16)
                     hole.flip()
                     self.obstacles.add(self.blackHoles)
