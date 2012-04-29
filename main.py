@@ -7,7 +7,7 @@ from pygame.sprite import Sprite, Group, RenderUpdates, OrderedUpdates
 from player import Player
 from bar import *
 from starfield import Starfield
-from transitions import Intro, Transition, GameOverScreen, Instructions
+from transitions import Intro, Transition, GameOverScreen, Instructions, WinScreen
 from obstacles import *
 from user_items import UserPlanet
 import sys, os
@@ -77,7 +77,7 @@ class Game(object):
         
         for evt in pygame.event.get():
             if evt.type == MOUSEBUTTONDOWN:
-                print pygame.mouse.get_pos()
+            #print pygame.mouse.get_pos()
             if evt.type == QUIT:
                 self.quit()
             if evt.type == KEYDOWN:
@@ -147,7 +147,7 @@ class Game(object):
                     self.bar.menuWidget.dropped()
                                         
             elif evt.type == MOUSEBUTTONDOWN:
-                print pos
+                #print pos
                 should_freebie = self.bar.collision_test(pos,self.player,evt.button)
                 if should_freebie and not self.freeb:
                     self.freebie()
@@ -215,6 +215,9 @@ class Game(object):
     def next_level(self,add_score_bool=True,trans_effect=True):
         if self.level < 5:
             self.level += 1
+        #print self.level
+        if self.level == 5:
+            self.gameWinner()
         if trans_effect: self.transition.add_to_group()
         changed = False
         while True:
@@ -443,7 +446,21 @@ class Game(object):
             pygame.display.flip()
 
         
-        
+    def gameWinner(self):
+        winnerScreen = WinScreen(0,0,self.screen)
+        while True:
+            self.clock.tick(self.fps)
+            pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
+            
+            
+            for evt in pygame.event.get():
+                if evt.type == QUIT:
+                    exit()
+                elif evt.type == KEYDOWN:
+                    exit()
+            
+            winnerScreen.draw()
+            pygame.display.flip()
         
     def run(self,level=0):
         self.done = False

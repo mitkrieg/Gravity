@@ -95,3 +95,8 @@ class GameOverScreen(Sprite):
 
     def draw(self):
         self.surface.blit(self.image,(self.rect.x,self.rect.y))
+
+
+class WinScreen(GameOverScreen):
+    def __init__(self,x,y,surface,image=str('won.png')):
+        GameOverScreen.__init__(self,x,y,surface,image)

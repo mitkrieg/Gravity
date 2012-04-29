@@ -188,7 +188,7 @@ class Player(Sprite):
         self.makeANew = False
         self.addTail = True  
         if life_reset_bool:
-            print "resetting lives"
+            #print "resetting lives"
             self.lives = 5
         self.resetAccel()
         self.vx,self.vy = self.start_vec

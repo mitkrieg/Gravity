@@ -53,7 +53,7 @@ class ToolBar(Bar):
         self.lives.update()
 
     def reset_lives(self):
-        print "resetting lives"
+        #print "resetting lives"
         self.lives.back_to_three(False)
 
     def reset_lives_over(self):
@@ -89,7 +89,7 @@ class ToolBar(Bar):
                 self.items_one.x = -30
                 self.itemsTab.rock_item.dark()
         elif self.itemsTab.earth_item.rect.collidepoint(pos) and self.itemsTab.open and self.itemsTab.earth_item and self.items_two_placed < self.items_two_limit:
-            print "touch earth"
+            #print "touch earth"
             x,y = pos
             x -= 30
             y -= 30
@@ -99,7 +99,7 @@ class ToolBar(Bar):
             if self.items_two_placed >= self.items_two_limit:
                 self.itemsTab.earth_item.dark()
         elif self.itemsTab.venus_item.rect.collidepoint(pos) and self.itemsTab.open and self.itemsTab.venus_item and self.items_three_placed < self.items_three_limit:
-            print "touch venus"
+            #print "touch venus"
             x,y = pos
             x -= 30
             y -= 30
@@ -127,7 +127,7 @@ class ToolBar(Bar):
         self.itemsTab.venus_item.light()
         
     def next_level(self,level,reset_lives_bool):
-        print level-2
+        #print level-2
         self.barGoal.change_image(self.images[level-2])
         if level != 4:
             self.barGoal.resize(40,40)
