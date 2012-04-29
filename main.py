@@ -234,8 +234,6 @@ class Game(object):
                 if self.level == 3:
                     self.make_level_three(add_score_bool)
                     print "level 3"
-                if self.level == 4:
-                    self.make_level_four()
 
                 if add_score_bool:
                     self.bar.score.update(2000)
@@ -537,7 +535,9 @@ class Game(object):
         temp.rotate(22)
         temp = Alien(471,486,self.masslessObstacles,self.screen,22,3)
         temp.rotate(80)
+        BlackHole(126,85,self.blackHoles,self.screen,80,71,28)
 
+        self.obstacles.add(self.blackHoles)
         self.obstacles.add(self.goal)
 
         
