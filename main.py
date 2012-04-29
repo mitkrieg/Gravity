@@ -18,7 +18,7 @@ class Game(object):
     title = 'Gravity'
     screen_size = 1000, 750
     
-    def __init__(self,level=1):
+    def __init__(self,level=0):
         pygame.init()
         
         self.screen = pygame.display.set_mode(self.screen_size)
@@ -103,6 +103,7 @@ class Game(object):
                     if self.thereIsAFile:
                         self.transition = Transition(-1314,0,self.screen,self.startItems)
                         self.intro_screen.begin()
+                        self.transition = Transition(-1314,0,self.screen,self.startItems)
                 elif evt.key == K_d:
                     if self.thereIsAFile:
                         os.remove('save.txt')
@@ -212,7 +213,7 @@ class Game(object):
 
 
     def next_level(self,add_score_bool=True,trans_effect=True):
-        if self.level < 2:
+        if self.level < 5:
             self.level += 1
         if trans_effect: self.transition.add_to_group()
         changed = False
@@ -231,8 +232,9 @@ class Game(object):
                 if self.level == 2:
                     self.make_level_two(add_score_bool)
                 if self.level == 3:
+                    self.make_level_four(add_score_bool)
+                if self.level == 4:
                     self.make_level_three(add_score_bool)
-                    print "level 3"
 
                 if add_score_bool:
                     self.bar.score.update(2000)
@@ -496,10 +498,71 @@ class Game(object):
         self.freeb = False
         self.bar.itemsTab.earth_item.light()
         self.masslessObstacles.empty()
-
+        temp = Alien(519,257,self.masslessObstacles,self.screen,28,3)
+        temp.rotate(18)
+        temp = Alien(539,247,self.masslessObstacles,self.screen,27,3)
+        temp.rotate(60)
+        temp = Alien(555,240,self.masslessObstacles,self.screen,25,3)
+        temp.rotate(-20)
+        temp = Alien(568,281,self.masslessObstacles,self.screen,29,3)
+        temp.rotate(-45)
+        temp = Alien(549,291,self.masslessObstacles,self.screen,32,3)
+        temp.rotate(10)
+        temp = Alien(530,301,self.masslessObstacles,self.screen,26,3)
+        temp = Alien(562,265,self.masslessObstacles,self.screen,27,3)
+        temp.rotate(25)   
+        temp = Alien(519,334,self.masslessObstacles,self.screen,25,3)
+        temp.rotate(-70)
+        temp = Alien(500,307,self.masslessObstacles,self.screen,25,3)
+        temp.rotate(-80)
+        temp = Alien(494,356,self.masslessObstacles,self.screen,25,3)
+        temp.rotate(-3)
+        temp = Alien(560,365,self.masslessObstacles,self.screen,25,3)
+        temp.rotate(77)
+        temp = Alien(525,374,self.masslessObstacles,self.screen,29,3)
+        temp.rotate(33)
+        temp = Alien(640,290,self.masslessObstacles,self.screen,26,3)
+        temp.rotate(37)
+        temp = Alien(607,250,self.masslessObstacles,self.screen,33,3)
+        temp.rotate(-27)  
+        temp = Alien(518,421,self.masslessObstacles,self.screen,24,3)
+        temp.rotate(55)
+        temp = Alien(473,419,self.masslessObstacles,self.screen,28,3)
+        temp.rotate(-43)
+        temp = Alien(480,453,self.masslessObstacles,self.screen,27,3)
+        temp = Alien(512,479,self.masslessObstacles,self.screen,31,3)
+        temp.rotate(4)
+        temp = Alien(422,500,self.masslessObstacles,self.screen,32,3)
+        temp = Alien(463,521,self.masslessObstacles,self.screen,27,3)
+        temp.rotate(22)
+        temp = Alien(471,486,self.masslessObstacles,self.screen,22,3)
+        temp.rotate(80)
+        temp = Alien(743,713,self.masslessObstacles,self.screen,25,3)
+        temp.rotate(13)
+        temp = Alien(527,532,self.masslessObstacles,self.screen,28,3)
+        temp.rotate(-8)
+        temp = Alien(568,559,self.masslessObstacles,self.screen,27,3)
+        temp = Alien(527,593,self.masslessObstacles,self.screen,23,3)
+        temp.rotate(-60)
+        temp = Alien(652,552,self.masslessObstacles,self.screen,25,3)
+        temp.rotate(-24)
+        temp = Alien(636,581,self.masslessObstacles,self.screen,26,3)
+        temp.rotate(-19)
+        temp = Alien(714,596,self.masslessObstacles,self.screen,22,3)
+        temp.rotate(-88)
+        BlackHole(162,42,self.blackHoles,self.screen,80,71,29)
         self.obstacles.add(self.goal)
+        self.obstacles.add(self.blackHoles)
 
-        
+    def make_level_four(self,reset_lives_bool):
+        self.goal.next_level(self.level)
+        self.bar.next_level(self.level,reset_lives_bool)
+        self.userPlacedObjects.empty()
+        self.blackHoles.empty()
+        self.obstacles.empty()
+        self.freeb = False
+        self.bar.itemsTab.earth_item.light()
+        self.masslessObstacles.empty()
     
 
 if len(sys.argv) > 1:

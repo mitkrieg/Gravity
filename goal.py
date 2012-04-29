@@ -17,7 +17,7 @@ class Goal(Sprite):
         self.mass = mass
         self.add(group)
         self.nextPosition = 0
-        self.positions = [(638,135),(543,237)]
+        self.positions = [(638,135),(672,355)]
         self.images = [(str('venus.png')),(str('saturny.png'))]
 
     def resize(self,w,h):
