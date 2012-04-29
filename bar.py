@@ -95,6 +95,8 @@ class ToolBar(Bar):
                 self.itemsTab.earth_item.dark()
         elif self.menuWidget.instructions_rect.collidepoint(pos) and self.menuWidget.open:
             self.game.inStructionees()
+        elif self.menuWidget.save_rect.collidepoint(pos) and self.menuWidget.open:
+            self.game.saveFile()
         return False
 
     def item_one_reset(self):
@@ -204,6 +206,7 @@ class MenuWidget(Bar):
         self.widget_rect = pygame.Rect(x+188,726,27,21)
         self.quit_rect = pygame.Rect(x+57,887,99,42)
         self.instructions_rect = pygame.Rect(726,1000,149,20)
+        self.save_rect = pygame.Rect(738,1000,124,35)
         self.first_open = False
         self.open = False
         self.arrow = arrow
@@ -215,11 +218,13 @@ class MenuWidget(Bar):
             self.widget_rect.y = newy-23
             self.quit_rect.y = 654
             self.instructions_rect.y = 534
+            self.save_rect.y = 588
         elif self.rect.y <= 723 and self.rect.y > 428 and self.open:
             self.rect.y = newy+1
             self.widget_rect.y = newy-3
             self.quit_rect.y = 1000
             self.instructions_rect.y = 1000
+            self.save_rect.y = 1000
         elif self.rect.y > 575:
             self.rect.y = 723
             self.widget_rect.y = 726
@@ -231,6 +236,7 @@ class MenuWidget(Bar):
             self.open = True
             self.quit_rect.y = 654
             self.instructions_rect.y = 534
+            self.save_rect.y = 588
             other.grabbed = None
 
     def dropped(self):
@@ -240,6 +246,7 @@ class MenuWidget(Bar):
             self.open = True
             self.quit_rect.y = 654
             self.instructions_rect.y = 534
+            self.save_rect.y = 588
             if not self.first_open:
                 self.arrow.kill()
                 self.first_open = True
@@ -248,6 +255,7 @@ class MenuWidget(Bar):
             self.widget_rect.y = 726
             self.quit_rect.y = 900
             self.instructions_rect.y = 1000
+            self.save_rect.y = 1000
             self.open = False
 
 

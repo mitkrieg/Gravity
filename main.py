@@ -85,7 +85,9 @@ class Game(object):
                     if not self.saveFile:
                         self.intro_screen.begin()
                     else:
+                        level,lives,score = system.loadFile()
                         print "load file"
+                        print level,lives,score
                 elif evt.key == K_RIGHT:
                     self.intro_screen.instruct(True)
                 elif evt.key == K_LEFT:
@@ -291,6 +293,7 @@ class Game(object):
         self.bar.update()
         self.toolbar.draw(self.screen)
         self.over_screen.draw()
+        pygame.display.flip()
         while overing:
             self.clock.tick(self.fps)
             
@@ -305,7 +308,7 @@ class Game(object):
                     if evt.key == K_RETURN:
                         overing = False
             
-            pygame.display.flip()
+            
         
         self.player.add(self.playerGroup)
         self.bar.reset_lives_over()
@@ -353,6 +356,29 @@ class Game(object):
                 
             pygame.display.flip()
     
+    def saveFile(self):
+        save_confirm = GameOverScreen(293,161,self.screen,str('filesaved.png'))
+        save_confirm.draw()
+        self.bar.menuWidget.dropped()
+        system.saveFile(self.level,self.player.lives,self.bar.score.score)
+        pygame.display.flip()
+        while True:
+            self.clock.tick(self.fps)
+            pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
+
+            for evt in pygame.event.get():
+                if evt.type == QUIT:
+                    self.quit()
+                    return
+                elif evt.type == KEYDOWN:
+                    if evt.key == K_RETURN:
+                        return
+                    elif evt.key == K_ESCAPE:
+                        self.quit()
+                        return
+
+            
+
         
     def run(self,level=0):
         self.done = False

@@ -38,9 +38,7 @@ def thereIsASaveFile():
 def loadFile():
     if thereIsASaveFile():
         fil = open('save.txt')
-        
-        p = fil.readline()
-        ret = pickle.loads(p)
+        ret = pickle.load(fil)
         return ret 
 
     return None
