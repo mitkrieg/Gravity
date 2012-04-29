@@ -70,7 +70,7 @@ class Alien(Sprite):
         self.rect.x = x
         self.rect.y = y
 
-    def update(self):
+    def update(self,player_status):
         pass
             
         
@@ -80,26 +80,27 @@ class EarthRounder(Alien):
         Alien.__init__(self,x,y,group,surf,size,kind)
         self.forth = True
 
-    def update(self):
-        if self.rect.x < 620 and self.forth:
-            self.rect.x += 2
+    def update(self,player_status):
+        if player_status:
+            if self.rect.x < 620 and self.forth:
+                self.rect.x += 2
             
-        elif self.rect.x > 514 and not self.forth:
-            self.rect.x -= 2
-        elif self.rect.x >= 620:
-            self.forth = False
-        else:
-            self.forth = True
+            elif self.rect.x > 514 and not self.forth:
+                self.rect.x -= 2
+            elif self.rect.x >= 620:
+                self.forth = False
+            else:
+                self.forth = True
 
-        if self.rect.x < 600 and self.forth:
-            self.rect.y -= 3
-        elif self.rect.x > 600 and self.forth:
-            self.rect.y += 2
+            if self.rect.x < 600 and self.forth:
+                self.rect.y -= 3
+            elif self.rect.x > 600 and self.forth:
+                self.rect.y += 2
 
-        elif self.rect.x > 600 and not self.forth:
-            self.rect.y -= 2
-        elif self.rect.x < 600 and not self.forth:
-            self.rect.y += 3
+            elif self.rect.x > 600 and not self.forth:
+                self.rect.y -= 2
+            elif self.rect.x < 600 and not self.forth:
+                self.rect.y += 3
 
 class BlueUpAnDown(Alien):
     def __init__(self,x,y,group,surf,size,kind,moveTop,moveBottom):
@@ -109,19 +110,20 @@ class BlueUpAnDown(Alien):
         self.moveTop = moveTop
         self.moveBottom = moveBottom
 
-    def update(self):
-        if self.shouldUpdate == 1:
-            if self.rect.y > self.moveTop and not self.forth:
-                self.rect.y -= 1
-            elif self.rect.y < self.moveBottom and self.forth:
-                self.rect.y += 1
-            elif self.rect.y >= self.moveBottom:
-                self.forth = False
-            else:
-                self.forth = True
+    def update(self,player_status):
+        if player_status:
+            if self.shouldUpdate == 1:
+                if self.rect.y > self.moveTop and not self.forth:
+                    self.rect.y -= 1
+                elif self.rect.y < self.moveBottom and self.forth:
+                    self.rect.y += 1
+                elif self.rect.y >= self.moveBottom:
+                    self.forth = False
+                else:
+                    self.forth = True
             #self.shouldUpdate = 0
-        else:
-            self.shouldUpdate += 1
+            else:
+                self.shouldUpdate += 1
 
 
 
@@ -131,9 +133,9 @@ class TwitchyOnes(Alien):
         self.twitch = 23
 
 
-    def update(self):
+    def update(self,player_status):
         should = random.randrange(30)
-        if should == self.twitch:
+        if should == self.twitch and player_status:
             centaur = self.rect.center
             amount = random.randrange(-20,20)
             self.image = pygame.transform.rotate(self.image,amount)
@@ -148,12 +150,12 @@ class Rotator(Alien):
         self.backup = self.image
         self.amount = 1
 
-    def update(self):
+    def update(self,player_status):
         centaur = self.rect.center
         self.image = pygame.transform.rotate(self.backup,self.amount)
         self.rect = self.image.get_rect()
         self.rect.center = centaur
-        if self.amount < 360:
+        if self.amount < 360 and player_status:
             self.amount += 1
-        else:
+        elif player_status:
             self.amount = 1

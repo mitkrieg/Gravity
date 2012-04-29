@@ -101,6 +101,7 @@ class Game(object):
                     self.intro_screen.instruct(False)
                 elif evt.key == K_n:
                     if self.thereIsAFile:
+                        self.transition = Transition(-1314,0,self.screen,self.startItems)
                         self.intro_screen.begin()
                 elif evt.key == K_d:
                     if self.thereIsAFile:
@@ -163,11 +164,9 @@ class Game(object):
                 for obj in self.userPlacedObjects:
                     obj.drop(self.blackHoles)
              
-
-        if self.player.makeANew:
-            self.masslessObstacles.update()
-
-     
+        
+   
+        #self.masslessObstacles.update(self.player.makeANew)
         self.stars.draw()
         self.player.drawTails()
         self.blackHoles.update()
@@ -460,6 +459,7 @@ class Game(object):
 
 
     def make_level_two(self,reset_lives_bool):
+        self.tails.empty()
         self.goal.next_level(self.level)
         self.bar.next_level(self.level,reset_lives_bool)
         self.userPlacedObjects.empty()
@@ -505,7 +505,7 @@ class Game(object):
 if len(sys.argv) > 1:
     level = sys.argv[1]
 else:
-    level = 1
+    level = 0
 
 level = int(level)
 
