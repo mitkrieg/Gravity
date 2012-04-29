@@ -102,6 +102,7 @@ class Game(object):
                 elif evt.key == K_n:
                     if self.thereIsAFile:
                         self.intro_screen.begin()
+                        self.transition = Transition(-1314,0,self.screen,self.startItems)
                 elif evt.key == K_d:
                     if self.thereIsAFile:
                         os.remove('save.txt')
@@ -213,7 +214,7 @@ class Game(object):
 
 
     def next_level(self,add_score_bool=True,trans_effect=True):
-        if self.level < 2:
+        if self.level < 5:
             self.level += 1
         if trans_effect: self.transition.add_to_group()
         changed = False
@@ -232,8 +233,9 @@ class Game(object):
                 if self.level == 2:
                     self.make_level_two(add_score_bool)
                 if self.level == 3:
+                    self.make_level_four(add_score_bool)
+                if self.level == 4:
                     self.make_level_three(add_score_bool)
-                    print "level 3"
 
                 if add_score_bool:
                     self.bar.score.update(2000)
@@ -535,19 +537,32 @@ class Game(object):
         temp.rotate(22)
         temp = Alien(471,486,self.masslessObstacles,self.screen,22,3)
         temp.rotate(80)
-        temp = Alien(617,594,self.masslessObstacles,self.screen,25,3)
-        temp.rotate(77)
-        temp = Alien(530,586,self.masslessObstacles,self.screen,23,3)
-        temp = Alien(448,573,self.masslessObstacles,self.screen,27,3)
-        temp.rotate(-32)
-        BlackHole(126,85,self.blackHoles,self.screen,80,71,28)
-        temp = TwitchyOnes(30,163,self.masslessObstacles,self.screen,30,2)
-        temp = TwitchyOnes(96,268,self.masslessObstacles,self.screen,30,2)
-        temp.rotate(-70)
-        self.obstacles.add(self.blackHoles)
+        temp = Alien(743,713,self.masslessObstacles,self.screen,25,3)
+        temp.rotate(13)
+        temp = Alien(527,532,self.masslessObstacles,self.screen,28,3)
+        temp.rotate(-8)
+        temp = Alien(568,559,self.masslessObstacles,self.screen,27,3)
+        temp = Alien(527,593,self.masslessObstacles,self.screen,23,3)
+        temp.rotate(-60)
+        temp = Alien(652,552,self.masslessObstacles,self.screen,25,3)
+        temp.rotate(-24)
+        temp = Alien(636,581,self.masslessObstacles,self.screen,26,3)
+        temp.rotate(-19)
+        temp = Alien(714,596,self.masslessObstacles,self.screen,22,3)
+        temp.rotate(-88)
+        BlackHole(162,42,self.blackHoles,self.screen,80,71,29)
         self.obstacles.add(self.goal)
+        self.obstacles.add(self.blackHoles)
 
-        
+    def make_level_four(self,reset_lives_bool):
+        self.goal.next_level(self.level)
+        self.bar.next_level(self.level,reset_lives_bool)
+        self.userPlacedObjects.empty()
+        self.blackHoles.empty()
+        self.obstacles.empty()
+        self.freeb = False
+        self.bar.itemsTab.earth_item.light()
+        self.masslessObstacles.empty()
     
 
 if len(sys.argv) > 1:
