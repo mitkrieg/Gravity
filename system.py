@@ -24,3 +24,11 @@ def text_return(text,color,size):
     font = pygame.font.Font(None, size)
     rend = font.render(text, True, color)
     return rend
+
+
+def thereIsASaveFile():
+    try:
+        fil = open('save.txt')
+        return True
+    except:
+        return False

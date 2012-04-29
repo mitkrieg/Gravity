@@ -42,7 +42,7 @@ class Player(Sprite):
         self.ax = 0
         self.ay = 0
         self.game = game
-        self.old_angle = 0
+        self.imageBackup = self.image
             
     def resetAccel(self):
         self.ax=0
@@ -93,11 +93,13 @@ class Player(Sprite):
             self.alive = True
 
         if not self.alive:
+            self.image = self.imageBackup
             if self.tailColorCounter == 5:
                 self.tailColorCounter = 0
             else:
                 self.tailColorCounter += 1
             pygame.time.delay(1000)
+            self.rect = self.image.get_rect()
             self.rect.x, self.rect.y = self.reset
             self.makeANew = False
             self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
@@ -119,17 +121,16 @@ class Player(Sprite):
                 self.addAccel(planet)
             if self.addTail:
                 self.tail.newSpace(self.rect.x,self.rect.y,self.ax,self.ay)
-            '''
+            
             slope = (self.vy-self.ay)/(self.vx-self.ax)
             self.angle = ((math.atan(slope)*(180/math.pi))+45)
-            rot = int(self.angle-self.old_angle)
-            print rot
-            if (self.angle > self.old_angle):
-                self.image = pygame.transform.rotate(self.image,1)
-            elif (self.angle < self.old_angle):
-                self.image = pygame.transform.rotate(self.image,1)
-            self.old_angle = self.angle
-            '''
+            
+            #print rot
+            if not self.shrink:
+                centaur = self.rect.center
+                self.image = pygame.transform.rotate(self.imageBackup,(self.angle*-1))
+                self.rect = self.image.get_rect()
+                self.rect.center = centaur
             self.rect.x += self.vx
             self.rect.y += self.vy
             self.vx += self.ax
@@ -173,6 +174,8 @@ class Player(Sprite):
         self.shrinkh = self.rect.h
             
     def restart(self):
+        self.image = self.imageBackup
+        self.rect = self.image.get_rect()
         x,y = self.reset
         self.rect.x = x
         self.rect.y = y

@@ -5,13 +5,13 @@ import pygame
 from pygame.locals import *
 from pygame.sprite import Sprite, Group, RenderUpdates, OrderedUpdates
 from player import Player
-#from goal import Goal
 from bar import *
 from starfield import Starfield
 from transitions import Intro, Transition, GameOverScreen, Instructions
 from obstacles import *
 from user_items import UserPlanet
 import sys
+import system
 
 
 class Game(object):
@@ -25,6 +25,13 @@ class Game(object):
         if self.title:
             pygame.display.set_caption(self.title)
         self.fps = 30
+
+        #if system.thereIsASaveFile():
+         #   print "file found"
+        #else:
+        #    print "file not found"
+
+        #group definitions
         self.userPlacedObjects = Group()
         self.startItems = RenderUpdates()
         self.playerGroup = RenderUpdates()
@@ -34,6 +41,8 @@ class Game(object):
         self.masslessObstacles = RenderUpdates()
         self.goalCollide = Group()
         self.toolbar = OrderedUpdates()
+
+        #level/transition/player & enemy/obstacle creation hocus pocus
         if level == 0:
             self.intro_screen = Intro(0,0,self.startItems)
         self.goal = Goal(573,372,self.goalCollide,30)
