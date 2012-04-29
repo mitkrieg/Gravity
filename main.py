@@ -63,10 +63,10 @@ class Game(object):
 
         if system.thereIsASaveFile() and level == 0:
             self.intro_screen = Intro(0,0,self.startItems,str('title_w_file.png'))
-            self.saveFile = True
+            self.thereIsAFile = True
         elif level == 0:
             self.intro_screen = Intro(0,0,self.startItems)
-            self.saveFile = False
+            self.thereIsAFile = False
       
     def quit(self):
         self.done = True
@@ -82,7 +82,7 @@ class Game(object):
                 if evt.key == K_ESCAPE:
                     self.quit()
                 elif evt.key == K_RETURN:
-                    if not self.saveFile:
+                    if not self.thereIsAFile:
                         self.intro_screen.begin()
                     else:
                         level,lives,score = system.loadFile()
