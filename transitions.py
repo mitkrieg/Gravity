@@ -20,11 +20,11 @@ class Intro(Sprite):
 
     def update(self):
         if self.starting and self.rect.y > -750:
-            self.rect.y -= 30
+            self.rect.y -= 50
         elif self.instructions and self.rect.x > -1000:
-            self.rect.x -= 40
+            self.rect.x -= 50
         elif not self.instructions and self.rect.x < 0:
-            self.rect.x += 40
+            self.rect.x += 50
             
 
     def next_level(self):

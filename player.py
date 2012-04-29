@@ -173,7 +173,7 @@ class Player(Sprite):
         self.shrinkw = self.rect.w
         self.shrinkh = self.rect.h
             
-    def restart(self,life_reset_bool):
+    def restart(self,life_reset_bool=True):
         self.image = self.imageBackup
         self.rect = self.image.get_rect()
         x,y = self.reset
