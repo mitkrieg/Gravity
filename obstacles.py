@@ -41,21 +41,23 @@ class Alien(Sprite):
     def __init__(self,x,y,group,surf,size,kind):
         Sprite.__init__(self)
         image_choices = [(str("alien0.png")),(str("alien1.png")),
-                         (str("alien2.png"))]
+                         (str("alien2.png")),(str("alien3.png"))]
         if self.image == None:
             self.image = system.load_graphics(image_choices[kind])
+        self.kind = kind
         self.image = self.scale(size)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.group = group
         self.add(self.group)
-        self.kind = kind
         self.surface = surf
 
     def scale(self,size):
         h = size
         w = int(size*2.09790)
+        if self.kind == 3:
+            w = size
         return pygame.transform.smoothscale(self.image, (w,h))
 
     def move(self,newx,newy):
@@ -79,7 +81,7 @@ class EarthRounder(Alien):
     def __init__(self,x,y,group,surf,size,kind):
         Alien.__init__(self,x,y,group,surf,size,kind)
         self.forth = True
-
+        
     def update(self):
         if self.rect.x < 620 and self.forth:
             self.rect.x += 2
