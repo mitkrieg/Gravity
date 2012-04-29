@@ -540,6 +540,18 @@ class Game(object):
 
         self.obstacles.add(self.goal)
 
+    def make_level_four(self,reset_lives_bool):
+        self.goal.next_level(self.level)
+        self.bar.next_level(self.level,reset_lives_bool)
+        self.userPlacedObjects.empty()
+        self.blackHoles.empty()
+        self.obstacles.empty()
+        self.freeb = False
+        self.bar.itemsTab.earth_item.light()
+        self.masslessObstacles.empty()
+        
+        self.obstacles.add(self.goal)
+
         
     
 
