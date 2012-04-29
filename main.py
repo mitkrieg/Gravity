@@ -10,7 +10,7 @@ from starfield import Starfield
 from transitions import Intro, Transition, GameOverScreen, Instructions
 from obstacles import *
 from user_items import UserPlanet
-import sys
+import sys, os
 import system
 
 
@@ -93,8 +93,14 @@ class Game(object):
                 elif evt.key == K_LEFT:
                     self.intro_screen.instruct(False)
                 elif evt.key == K_n:
-                    if self.saveFile:
+                    if self.thereIsAFile:
                         self.intro_screen.begin()
+                elif evt.key == K_d:
+                    if self.thereIsAFile:
+                        os.remove('save.txt')
+                        self.thereIsAFile = False
+                        self.startItems.empty()
+                        self.intro_screen = Intro(0,0,self.startItems)
 
        
         if self.intro_screen.next_level():
