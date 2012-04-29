@@ -50,6 +50,7 @@ class ToolBar(Bar):
         self.lives.update()
 
     def reset_lives(self):
+        print "resetting lives"
         self.lives.back_to_three(False)
 
     def reset_lives_over(self):
@@ -108,12 +109,12 @@ class ToolBar(Bar):
         self.items_two_placed = 0
         self.itemsTab.earth_item.light()
         
-    def next_level(self,level):
+    def next_level(self,level,reset_lives_bool):
         self.barGoal.change_image(self.images[level-2])
         self.barGoal.resize(40,40)
         self.item_one_reset()
-        self.reset_lives()
-        self.score.update(2000)
+        if reset_lives_bool:
+            self.reset_lives()
         self.nextPosition += 1
         if level == 2:
             self.item_two_reset()
@@ -140,6 +141,11 @@ class Score(Sprite):
         self.score += loss
         self.image = system.text_return(str(self.score),self.color,self.size)
 
+
+    def reset(self,new_score):
+        self.score = 0
+        self.score = new_score
+        self.update(0)
 
 class ItemsTab(Bar):
     def __init__(self,x,y,friends,place,x_open_offset,x_closed_offset,click_offset,image=str('items_tab.png')):

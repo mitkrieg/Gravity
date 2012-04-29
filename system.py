@@ -2,6 +2,7 @@
 
 import pygame
 from pygame.locals import *
+from pygame.sprite import Sprite
 import os, sys
 import pickle
 
@@ -52,3 +53,18 @@ def saveFile(level,lives,score):
     fil.write(s)
     fil.close()
         
+
+
+class Loading(Sprite):
+    image = None
+    def __init__(self):
+        Sprite.__init__(self)
+        if self.image == None:
+            self.image = load_graphics(str('loading.png'))
+        self.rect = self.image.get_rect()
+        self.rect.x = 132
+        self.rect.y = 490
+    
+
+    def draw(self,surf):
+        surf.blit(self.image,(self.rect.x,self.rect.y))

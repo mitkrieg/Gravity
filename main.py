@@ -41,7 +41,7 @@ class Game(object):
         self.goal = Goal(573,372,self.goalCollide,30)
         self.bar = ToolBar(0,626,self.toolbar,self.screen,self,self.goal)
         self.player = Player(50,535,self.screen,(255,0,0),self.playerGroup,1000,624,(2,-2),self.tails,self)
-        self.transition = Transition(-1314,0,self.screen,self.startItems)
+        
         self.level = level
         self.levelUp = True
         self.stars = Starfield(self.screen,1000,626,200)
@@ -76,6 +76,8 @@ class Game(object):
         pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
         
         for evt in pygame.event.get():
+            if evt.type == MOUSEBUTTONDOWN:
+                print pygame.mouse.get_pos()
             if evt.type == QUIT:
                 self.quit()
             if evt.type == KEYDOWN:
@@ -83,11 +85,16 @@ class Game(object):
                     self.quit()
                 elif evt.key == K_RETURN:
                     if not self.thereIsAFile:
+                        self.transition = Transition(-1314,0,self.screen,self.startItems)
                         self.intro_screen.begin()
                     else:
-                        level,lives,score = system.loadFile()
-                        print "load file"
-                        print level,lives,score
+                        loadingDial = system.Loading()
+                        pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
+                        self.startItems.draw(self.screen)
+                        loadingDial.draw(self.screen)
+                        pygame.display.flip()
+                        self.loadFile(system.loadFile())
+                        
                 elif evt.key == K_RIGHT:
                     self.intro_screen.instruct(True)
                 elif evt.key == K_LEFT:
@@ -106,7 +113,7 @@ class Game(object):
         if self.intro_screen.next_level():
             self.level = 1
         
-        self.startItems.update()
+        
         self.startItems.update()
         self.stars.draw()
         self.goalCollide.draw(self.screen)
@@ -202,10 +209,10 @@ class Game(object):
         pygame.display.flip()
 
 
-    def next_level(self):
+    def next_level(self,add_score_bool=True,trans_effect=True):
         if self.level < 2:
             self.level += 1
-        self.transition.add_to_group()
+        if trans_effect: self.transition.add_to_group()
         changed = False
         while True:
             self.clock.tick(self.fps)
@@ -218,12 +225,19 @@ class Game(object):
                     if evt.key == K_ESCAPE:
                         self.quit()
                         
-            if self.transition.rect.x >= -50 and not changed:
+            if not trans_effect or self.transition.rect.x >= -50 and not changed:
                 if self.level == 2:
-                    self.make_level_two()
+                    self.make_level_two(add_score_bool)
 
-                self.player.restart()
-                changed = True         
+                if add_score_bool:
+                    self.bar.score.update(2000)
+
+
+                self.player.restart(add_score_bool)
+                changed = True      
+
+            if not trans_effect:
+                break
                 
             self.startItems.update()
             self.stars.draw()
@@ -241,7 +255,8 @@ class Game(object):
 
 
             pygame.display.flip()
-        self.transition.reset(-1314)
+        if trans_effect:
+            self.transition.reset(-1314)
 
     
     def freebie(self):
@@ -384,7 +399,44 @@ class Game(object):
                         return
 
             
+    def loadFile(self,file_tuple):
+        gotoLevel,gotoLives,gotoScore = file_tuple
+        self.level = gotoLevel
+        self.player.lives = gotoLives
+        self.bar.lives.next_life = gotoLives+1
+        self.bar.lives_update()
+        self.bar.score.reset(gotoScore)
+        if gotoLevel != 1:
+            self.level -= 1
+            self.next_level(False,False)
+        self.startItems.empty()
+        self.intro_screen = Intro(0,0,self.startItems,str('title_w_file.png'))
+        self.intro_screen.begin()
+        self.transition = Transition(-1314,0,self.screen,self.startItems)
 
+        while True:
+            self.clock.tick(self.fps)
+            pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
+            
+            
+            if self.intro_screen.next_level():
+                break
+            
+            self.startItems.update()
+            self.startItems.update()
+            self.stars.draw()
+            self.goalCollide.draw(self.screen)
+            self.toolbar.draw(self.screen)
+            self.masslessObstacles.draw(self.screen)
+            self.playerGroup.draw(self.screen)
+            self.blackHoles.draw(self.screen)
+            self.startItems.draw(self.screen)
+            
+            
+            pygame.display.flip()
+
+        
+        
         
     def run(self,level=0):
         self.done = False
@@ -400,9 +452,9 @@ class Game(object):
                 self.tick()
 
 
-    def make_level_two(self):
+    def make_level_two(self,reset_lives_bool):
         self.goal.next_level(self.level)
-        self.bar.next_level(self.level)
+        self.bar.next_level(self.level,reset_lives_bool)
         self.userPlacedObjects.empty()
         self.blackHoles.empty()
         self.obstacles.empty()

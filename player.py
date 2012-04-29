@@ -173,7 +173,7 @@ class Player(Sprite):
         self.shrinkw = self.rect.w
         self.shrinkh = self.rect.h
             
-    def restart(self):
+    def restart(self,life_reset_bool):
         self.image = self.imageBackup
         self.rect = self.image.get_rect()
         x,y = self.reset
@@ -183,7 +183,9 @@ class Player(Sprite):
         self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
         self.makeANew = False
         self.addTail = True  
-        self.lives = 5
+        if life_reset_bool:
+            print "resetting lives"
+            self.lives = 5
         self.resetAccel()
         self.vx,self.vy = self.start_vec
         self.vxi,self.vyi = self.start_vec
