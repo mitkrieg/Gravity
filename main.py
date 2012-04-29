@@ -544,7 +544,7 @@ class Game(object):
     
 
 if len(sys.argv) > 1:
-    level = sys.argv[1]-1
+    level = sys.argv[1]
 else:
     level = 0
 
