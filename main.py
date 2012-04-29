@@ -232,9 +232,9 @@ class Game(object):
                 if self.level == 2:
                     self.make_level_two(add_score_bool)
                 if self.level == 3:
-                    self.make_level_four(add_score_bool)
-                if self.level == 4:
                     self.make_level_three(add_score_bool)
+                #if self.level == 4:
+                #    self.make_level_three(add_score_bool)
 
                 if add_score_bool:
                     self.bar.score.update(2000)

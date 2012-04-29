@@ -90,6 +90,7 @@ class Player(Sprite):
             self.resetAccel()
             self.vx,self.vy = self.start_vec
             self.vxi,self.vyi = self.start_vec
+            self.shrink = False
             self.alive = True
 
         if not self.alive:
@@ -104,6 +105,7 @@ class Player(Sprite):
             self.makeANew = False
             self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
             self.remove(self.group)
+            self.shrink = False
             self.resetAccel()
             self.vx,self.vy = self.start_vec
             self.vxi,self.vyi = self.start_vec
@@ -179,6 +181,8 @@ class Player(Sprite):
         x,y = self.reset
         self.rect.x = x
         self.rect.y = y
+        self.shrinkTime = True
+        self.shrink = False
         self.tailGroup.empty()
         self.tail = Tails(self.tailGroup,self.tailColors[self.tailColorCounter])
         self.makeANew = False
