@@ -212,37 +212,10 @@ class Game(object):
                         
             if self.transition.rect.x >= -50 and not changed:
                 if self.level == 2:
-                    self.goal.next_level(self.level)
-                    self.bar.next_level(self.level)
-                    self.userPlacedObjects.empty()
-                    self.blackHoles.empty()
-                    self.obstacles.empty()
-                    self.freeb = False
-                    self.bar.itemsTab.earth_item.light()
-                    self.masslessObstacles.empty()
-                    temp = Alien(55,143,self.masslessObstacles,self.screen,39,1)
-                    temp.rotate(-66)
-                    temp = Alien(189,98,self.masslessObstacles,self.screen,36,1)
-                    temp.rotate(23)
-                    temp = Alien(107,228,self.masslessObstacles,self.screen,32,1)
-                    temp.rotate(17)
-                    temp = BlueUpAnDown(249,244,self.masslessObstacles,self.screen,41,1,204,245)
-                    temp.rotate(80)
-                    temp = TwitchyOnes(898,541,self.masslessObstacles,self.screen,45,2)
-                    temp.rotate(22)
-                    temp = TwitchyOnes(730,545,self.masslessObstacles,self.screen,40,2)
-                    temp.rotate(-30)
-                    temp = Rotator(525,121,self.masslessObstacles,self.screen,50,0,-70)
-                   
-                    BlackHole(842,388,self.blackHoles,self.screen,80,71,16)
-                    hole = BlackHole(388,189,self.blackHoles,self.screen,80,71,16)
-                    hole.flip()
-                    self.obstacles.add(self.blackHoles)
-                    self.obstacles.add(self.goal)
+                    self.make_level_two()
 
                 self.player.restart()
-                changed = True
-                
+                changed = True         
                 
             self.startItems.update()
             self.stars.draw()
@@ -315,7 +288,6 @@ class Game(object):
 
     def gameOver(self):
         overing = True
-        #self.bar.lives_update()
         self.bar.update()
         self.toolbar.draw(self.screen)
         self.over_screen.draw()
@@ -394,6 +366,39 @@ class Game(object):
                 self.level_0()
             while self.level >= 1 and not self.done:
                 self.tick()
+
+
+    def make_level_two(self):
+        self.goal.next_level(self.level)
+        self.bar.next_level(self.level)
+        self.userPlacedObjects.empty()
+        self.blackHoles.empty()
+        self.obstacles.empty()
+        self.freeb = False
+        self.bar.itemsTab.earth_item.light()
+        self.masslessObstacles.empty()
+        temp = Alien(55,143,self.masslessObstacles,self.screen,39,1)
+        temp.rotate(-66)
+        temp = Alien(189,98,self.masslessObstacles,self.screen,36,1)
+        temp.rotate(23)
+        temp = Alien(107,228,self.masslessObstacles,self.screen,32,1)
+        temp.rotate(17)
+        temp = BlueUpAnDown(249,244,self.masslessObstacles,self.screen,41,1,204,245)
+        temp.rotate(80)
+        temp = TwitchyOnes(898,541,self.masslessObstacles,self.screen,45,2)
+        temp.rotate(22)
+        temp = TwitchyOnes(730,545,self.masslessObstacles,self.screen,40,2)
+        temp.rotate(-30)
+        temp = Rotator(525,121,self.masslessObstacles,self.screen,50,0,-70)
+        BlackHole(842,388,self.blackHoles,self.screen,80,71,16)
+        hole = BlackHole(388,189,self.blackHoles,self.screen,80,71,16)
+        hole.flip()
+        self.obstacles.add(self.blackHoles)
+        self.obstacles.add(self.goal)
+
+
+
+
 
 
 

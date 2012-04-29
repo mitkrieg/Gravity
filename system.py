@@ -3,6 +3,7 @@
 import pygame
 from pygame.locals import *
 import os, sys
+import pickle
 
 
 def load_graphics(filename):
@@ -32,3 +33,26 @@ def thereIsASaveFile():
         return True
     except:
         return False
+
+
+def loadFile():
+    if thereIsASaveFile():
+        fil = open('save.txt')
+        
+        p = fil.readline()
+        ret = pickle.loads(p)
+        return ret 
+
+    return None
+
+
+def saveFile(level,lives,score):
+    if thereIsASaveFile():
+        fil = open('save.txt','w')
+        
+        saveInfo = [level,lives,score]
+        s = pickle.dumps(saveInfo)
+
+        fil.write(s)
+        fil.close()
+        
