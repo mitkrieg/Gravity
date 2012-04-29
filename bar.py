@@ -20,7 +20,8 @@ class Bar(Sprite):
         self.group = friends
         self.screen = place
         self.nextPosition = 0
-        self.images = [(str('venus.png')),(str('saturny.png'))]
+        self.images = [(str('venus.png')),(str('saturny.png')),
+                       (str('ring_planet.png'))]
         
 
 class ToolBar(Bar):
@@ -126,8 +127,12 @@ class ToolBar(Bar):
         self.itemsTab.venus_item.light()
         
     def next_level(self,level,reset_lives_bool):
+        print level-2
         self.barGoal.change_image(self.images[level-2])
-        self.barGoal.resize(40,40)
+        if level != 4:
+            self.barGoal.resize(40,40)
+        else:
+            self.barGoal.resize(57,40)
         self.item_one_reset()
         if reset_lives_bool:
             self.reset_lives()
@@ -141,8 +146,13 @@ class ToolBar(Bar):
             self.items_three_limit = 1
             self.item_two_reset()
             self.item_one_reset()
-            print "3333: coming soon"
-        
+        elif level == 4:
+            self.item_three_reset()
+            self.items_two_limit = 1
+            self.items_three_limit = 1
+            self.item_two_reset()
+            self.item_one_reset()
+                    
     
 class Score(Sprite):
     def __init__(self,x,y,group,surf,start_score,size,color):

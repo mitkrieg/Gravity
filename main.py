@@ -233,8 +233,8 @@ class Game(object):
                     self.make_level_two(add_score_bool)
                 if self.level == 3:
                     self.make_level_three(add_score_bool)
-                #if self.level == 4:
-                #    self.make_level_three(add_score_bool)
+                if self.level == 4:
+                    self.make_level_four(add_score_bool)
 
                 if add_score_bool:
                     self.bar.score.update(2000)
@@ -563,6 +563,17 @@ class Game(object):
         self.freeb = False
         self.bar.itemsTab.earth_item.light()
         self.masslessObstacles.empty()
+        BlackHole(183,61,self.blackHoles,self.screen,80,71,16)
+        BlackHole(101,157,self.blackHoles,self.screen,80,71,16)
+        BlackHole(234,157,self.blackHoles,self.screen,80,71,16)
+        BlackHole(178,250,self.blackHoles,self.screen,80,71,16)
+        hole = BlackHole(683,41,self.blackHoles,self.screen,80,71,16)
+        hole = BlackHole(577,41,self.blackHoles,self.screen,80,71,16)
+        hole = BlackHole(646,133,self.blackHoles,self.screen,80,71,16)
+        hole = BlackHole(747,133,self.blackHoles,self.screen,80,71,16)
+
+        self.obstacles.add(self.blackHoles)
+        self.obstacles.add(self.goal)
     
 
 if len(sys.argv) > 1:
