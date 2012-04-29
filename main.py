@@ -140,6 +140,9 @@ class Game(object):
             elif evt.type == KEYDOWN:
                 if evt.key == K_ESCAPE and not self.bar.itemsTab.open and self.bar.grabbed == None:
                     self.bar.menuWidget.dropped()
+                elif evt.key == K_ESCAPE and self.bar.grabbed == None:
+                    self.bar.itemsTab.dropped()
+                    self.bar.menuWidget.dropped()
                                         
             elif evt.type == MOUSEBUTTONDOWN:
                 print pos

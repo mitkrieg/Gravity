@@ -90,4 +90,4 @@ class UserPlanet(Sprite):
         elif self.kind == 2:
             self.bar.item_two_reset()
         elif self.kind == 3:
-            self.bar.item_two_reset()
+            self.bar.item_three_reset()
