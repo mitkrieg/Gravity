@@ -193,6 +193,7 @@ class Game(object):
                 
         if pygame.sprite.collide_mask(self.player, self.goal):
             self.next_level()
+            
 
         for obj in self.blackHoles:
             if pygame.sprite.collide_mask(self.player,obj):
@@ -215,7 +216,7 @@ class Game(object):
             self.level += 1
         #print self.level
         if self.level == 5:
-            self.gameWinner()
+            return
         if trans_effect: self.transition.add_to_group()
         changed = False
         while True:
@@ -265,6 +266,7 @@ class Game(object):
             pygame.display.flip()
         if trans_effect:
             self.transition.reset(-1314)
+        return False
 
     
     def freebie(self):
@@ -445,20 +447,19 @@ class Game(object):
 
         
     def gameWinner(self):
-        winnerScreen = WinScreen(0,0,self.screen)
-        while True:
-            self.clock.tick(self.fps)
-            pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
+        self.clock.tick(self.fps)
+        pygame.draw.rect(self.screen,(0,0,0),((0,0),(1000,750)))
             
             
-            for evt in pygame.event.get():
-                if evt.type == QUIT:
-                    exit()
-                elif evt.type == KEYDOWN:
-                    exit()
+        for evt in pygame.event.get():
+            if evt.type == QUIT:
+                self.quit()
+                
+            elif evt.type == KEYDOWN:
+                self.quit()
             
-            winnerScreen.draw()
-            pygame.display.flip()
+        self.winnerScreen.draw()
+        pygame.display.flip()
         
     def run(self,level=0):
         self.done = False
@@ -471,8 +472,11 @@ class Game(object):
         while not self.done:
             while self.level == 0 and not self.done:
                 self.level_0()
-            while self.level >= 1 and not self.done:
+            while self.level >= 1 and self.level < 5 and not self.done:
                 self.tick()
+            self.winnerScreen = WinScreen(0,0,self.screen)
+            while not self.done:
+                self.gameWinner()
 
 
     def make_level_two(self,reset_lives_bool):
