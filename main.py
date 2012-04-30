@@ -60,6 +60,7 @@ class Game(object):
         self.obstacles.add(self.goalCollide)
         self.freeb = False
         self.gotoLevel = level
+        self.loaded = False
 
         if system.thereIsASaveFile() and level == 0:
             self.intro_screen = Intro(0,0,self.startItems,str('title_w_file.png'))
@@ -198,6 +199,9 @@ class Game(object):
             self.gameOver()
                 
         if pygame.sprite.collide_mask(self.player, self.goal):
+            if self.loaded != 0:
+                self.level = self.loaded
+                self.loaded = 0
             self.next_level()
             
 
@@ -219,7 +223,9 @@ class Game(object):
 
     def next_level(self,add_score_bool=True,trans_effect=True):
         if self.level < 5:
+            print self.level,"pre-adding"
             self.level += 1
+            print self.level,"post-adding"
         #print self.level
         if self.level == 5:
             return
@@ -237,6 +243,7 @@ class Game(object):
                         self.quit()
                         
             if not trans_effect or self.transition.rect.x >= -50 and not changed:
+                print self.level
                 if self.level == 2:
                     self.make_level_two(add_score_bool)
                 if self.level == 3:
@@ -252,6 +259,7 @@ class Game(object):
                 changed = True      
 
             if not trans_effect:
+                print self.level,"load" 
                 break
                 
             self.startItems.update()
@@ -272,6 +280,7 @@ class Game(object):
             pygame.display.flip()
         if trans_effect:
             self.transition.reset(-1314)
+        print self.level,"end o loop"
         return False
 
     
@@ -418,6 +427,8 @@ class Game(object):
     def loadFile(self,file_tuple):
         gotoLevel,gotoLives,gotoScore = file_tuple
         self.level = gotoLevel
+        if self.level > 1:
+            self.loaded = self.level
         self.player.lives = gotoLives
         self.bar.lives.next_life = gotoLives+1
         self.bar.lives_update()
