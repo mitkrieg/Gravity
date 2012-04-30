@@ -163,7 +163,9 @@ class Game(object):
                 for obj in self.userPlacedObjects:
                     obj.drop(self.blackHoles)
              
-        
+   
+        if self.level == 4 and self.player.makeANew:
+            self.masslessObstacles.update()
    
         #self.masslessObstacles.update(self.player.makeANew)
         self.stars.draw()
@@ -184,11 +186,15 @@ class Game(object):
             self.bar.score.update(-200)
             pygame.time.wait(750)
             self.player.lives -= 1
+            if self.level == 4:
+                self.asteroid.reset()
             self.player.add(self.playerGroup)
         elif len(self.playerGroup) == 0:
             self.bar.score.update(-200)
             self.bar.lives_update()
             self.over_screen = GameOverScreen(293,161,self.screen)
+            if self.level == 4:
+                self.asteroid.reset()
             self.gameOver()
                 
         if pygame.sprite.collide_mask(self.player, self.goal):
@@ -300,7 +306,7 @@ class Game(object):
             
 
             self.startItems.update()
-            self.masslessObstacles.update()
+            #self.masslessObstacles.update()
             self.stars.draw()
             self.player.drawTails()
             self.goalCollide.draw(self.screen)
@@ -590,6 +596,8 @@ class Game(object):
         hole = BlackHole(577,41,self.blackHoles,self.screen,80,71,16)
         hole = BlackHole(646,133,self.blackHoles,self.screen,80,71,16)
         hole = BlackHole(747,133,self.blackHoles,self.screen,80,71,16)
+        self.asteroid = Asteroid(840,530,self.masslessObstacles,self.screen,55,4)
+        self.asteroid.rotate(137)
 
         self.obstacles.add(self.blackHoles)
         self.obstacles.add(self.goal)

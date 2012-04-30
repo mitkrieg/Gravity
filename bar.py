@@ -20,8 +20,8 @@ class Bar(Sprite):
         self.group = friends
         self.screen = place
         self.nextPosition = 0
-        self.images = [(str('venus.png')),(str('saturny.png')),
-                       (str('ring_planet.png'))]
+        self.images = [(str('saturny.png')),(str('ring_planet.png')),
+                       (str('earth.png'))]
         
 
 class ToolBar(Bar):
@@ -93,7 +93,7 @@ class ToolBar(Bar):
             x,y = pos
             x -= 30
             y -= 30
-            self.grabbed = UserPlanet(x,y,65,65,30,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,2,self.goal,str('earth.png'))
+            self.grabbed = UserPlanet(x,y,65,65,30,self.game.userPlacedObjects,self.group,self.game.obstacles,self,player,2,self.goal,str('ringed.png'))
             self.items_two_placed += 1
             #print self.items_two_placed
             if self.items_two_placed >= self.items_two_limit:
@@ -129,7 +129,7 @@ class ToolBar(Bar):
     def next_level(self,level,reset_lives_bool):
         #print level-2
         self.barGoal.change_image(self.images[level-2])
-        if level != 4:
+        if level != 3:
             self.barGoal.resize(40,40)
         else:
             self.barGoal.resize(57,40)

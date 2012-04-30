@@ -41,7 +41,8 @@ class Alien(Sprite):
     def __init__(self,x,y,group,surf,size,kind):
         Sprite.__init__(self)
         image_choices = [(str("alien0.png")),(str("alien1.png")),
-                         (str("alien2.png")),(str("alien3.png"))]
+                         (str("alien2.png")),(str("alien3.png")),
+                         (str('asteroid.png'))]
         if self.image == None:
             self.image = system.load_graphics(image_choices[kind])
         self.kind = kind
@@ -58,6 +59,8 @@ class Alien(Sprite):
         w = int(size*2.09790)
         if self.kind == 3:
             w = size
+        elif self.kind == 4:
+            w = int(size*1.5)
         return pygame.transform.smoothscale(self.image, (w,h))
 
     def move(self,newx,newy):
@@ -166,3 +169,23 @@ class Rotator(Alien):
             self.amount += 1
         elif player_status:
             self.amount = 1
+
+
+class Asteroid(Alien):
+    def __init__(self,x,y,group,surf,size,kind):
+        Alien.__init__(self,x,y,group,surf,size,kind)
+        self.selector = 0
+        self.bkpx = x
+        self.bkpy = y
+
+    def update(self):
+        if self.selector == 12:
+            self.rect.x -= 1
+            self.rect.y -= 1
+            self.selector = 0
+        else:
+            self.selector += 1
+        
+    def reset(self):
+        self.rect.x = self.bkpx
+        self.rect.y = self.bkpy
