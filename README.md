@@ -43,6 +43,5 @@ Still in progress for deployment on Heroku
 ├── starfield.py        <- Creates Class for the starfield
 ├── system.py           <- Script for saving and loading game .txt files
 ├── transitions.py      <- Animations for transitions between screens
-├── user_items.py       <- Creates class for items to curve player trajectory
-└── presentation.pdf    <- a PDF version of the power point presentation
+└── user_items.py       <- Creates class for items to curve player trajectory
 ```
