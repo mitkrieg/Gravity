@@ -223,9 +223,9 @@ class Game(object):
 
     def next_level(self,add_score_bool=True,trans_effect=True):
         if self.level < 5:
-            print self.level,"pre-adding"
+            print(self.level,"pre-adding")
             self.level += 1
-            print self.level,"post-adding"
+            print(self.level,"post-adding")
         #print self.level
         if self.level == 5:
             return
@@ -243,7 +243,7 @@ class Game(object):
                         self.quit()
                         
             if not trans_effect or self.transition.rect.x >= -50 and not changed:
-                print self.level
+                print(self.level)
                 if self.level == 2:
                     self.make_level_two(add_score_bool)
                 if self.level == 3:
@@ -259,7 +259,7 @@ class Game(object):
                 changed = True      
 
             if not trans_effect:
-                print self.level,"load" 
+                print(self.level,"load")
                 break
                 
             self.startItems.update()
@@ -280,7 +280,7 @@ class Game(object):
             pygame.display.flip()
         if trans_effect:
             self.transition.reset(-1314)
-        print self.level,"end o loop"
+        print(self.level,"end o loop")
         return False
 
     

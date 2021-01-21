@@ -11,9 +11,9 @@ def load_graphics(filename):
     fullfname = os.path.join('assets', filename)
     try:
         image = pygame.image.load(fullfname)
-    except pygame.error, message:
-        print 'Cannot load', fullfname
-        raise SystemExit, message
+    except pygame.error:
+        print('Cannot load', fullfname)
+        raise SystemExit
     return image
 
 
@@ -38,7 +38,7 @@ def thereIsASaveFile():
 
 def loadFile():
     if thereIsASaveFile():
-        fil = open('save.txt')
+        fil = open('save.txt','rb')
         ret = pickle.load(fil)
         return ret 
 
@@ -46,7 +46,7 @@ def loadFile():
 
 
 def saveFile(level,lives,score):
-    fil = open('save.txt','w')
+    fil = open('save.txt','wb')
     saveInfo = ((level,lives,score))
     s = pickle.dumps(saveInfo)
     
